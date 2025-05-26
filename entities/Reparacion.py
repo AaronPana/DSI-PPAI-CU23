@@ -1,0 +1,2 @@
+class Reparacion:
+    pass
