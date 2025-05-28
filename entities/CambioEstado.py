@@ -14,12 +14,11 @@ class CambioEstado:
         estado: Estado,
         responsableInscripcion: Empleado,
         fechaHoraInicio: datetime,
-        fechaHoraFin: datetime | None = None,
     ) -> None:
         self._estado: Estado = estado
         self._responsableInscripcion: Empleado = responsableInscripcion
         self._fechaHoraInicio: datetime = fechaHoraInicio
-        self._fechaHoraFin: datetime | None = fechaHoraFin
+        self._fechaHoraFin: datetime | None = None
         # No implementamos un metodo para asociar motivos ya que no se requiere para el CU23
         self._motivosFueraServicio: list[MotivoFueraServicio] = []
 
@@ -33,5 +32,5 @@ class CambioEstado:
     def fechaHoraFin(self, nuevaFechaHoraFin) -> None:
         self._fechaHoraFin = nuevaFechaHoraFin
 
-    def esEstadoActual(self):
-        pass
+    def esEstadoActual(self) -> bool:
+        return self._fechaHoraFin is None

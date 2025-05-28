@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from entities.AlcanceSismo import AlcanceSismo
 from entities.CambioEstado import CambioEstado
@@ -8,6 +9,11 @@ from entities.Estado import Estado
 from entities.MagnitudRichter import MagnitudRichter
 from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from entities.SerieTemporal import SerieTemporal
+
+
+InfoMuestra = dict[str, str | list[str]]
+InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
+InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
 
 class EventoSismico:
@@ -46,7 +52,7 @@ class EventoSismico:
         # No deberia recibir los cambios de estado sino irlos creando y asignando los estados
         self._cambiosEstado: list[CambioEstado] = []
         # Primer cambio de estado
-        self.crearCambioEstado(self._estadoActual)
+        # self.crearCambioEstado(self._estadoActual)
 
     @property
     def origenDeGeneracion(self) -> str:
@@ -73,43 +79,100 @@ class EventoSismico:
         return self._latitudEpicentro
 
     @property
-    def latitudHipocentro(self) -> str:
-        return self._latitudHipocentro
-
-    @property
     def longitudEpicentro(self) -> str:
         return self._longitudEpicentro
+
+    @property
+    def latitudHipocentro(self) -> str:
+        return self._latitudHipocentro
 
     @property
     def longitudHipocentro(self) -> str:
         return self._longitudHipocentro
 
-    def getDatos(self):
-        pass
+    def esAutoDetectado(self) -> bool:
+        return self._estadoActual.esAutoDetectado()
 
-    def getDatosSismicos(self):
-        pass
+    def esPendienteRevision(self) -> bool:
+        return self._estadoActual.esPendienteRevision()
 
-    def getDatoSeriesTemporales(self):
-        pass
+    def getDatos(self) -> dict[str, str]:
+        """
+        rtype: dict[str, str]
+        return: diccionarios de datos basicos del evento sismico
+        """
+        infoBasicaEventoSismico: dict[str, str] = {
+            "fechaHoraOcurrencia": self._fechaHoraOcurrencia.strftime(
+                "%d/%m/%Y %H:%M:%S"
+            ),
+            "latitudEpicentro": self._latitudEpicentro,
+            "longitudEpicentro": self._longitudEpicentro,
+            "latitudHipocentro": self._latitudHipocentro,
+            "longitudHipocentro": self._longitudHipocentro,
+            "valorMagnitud": str(self._valorMagnitud),
+        }
+        return infoBasicaEventoSismico
 
-    def esAutoDetectado(self):
-        pass
+    def getDatosSismicos(self) -> InfoDatosSismicos:
+        """
+        rtype: InfoDatosSismicos
+        return: diccionario con datos sismicos del evento que
+        incluye todos los detalles de todas las muestras de todas las series temporales
+        """
 
-    def esPendienteRevision(self):
-        pass
+        infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatoSeriesTemporales()
 
-    def revisar(self):
-        pass
+        infoSerieTemporalesOrdenadas: list[InfoSerieTemporal] = (
+            self.ordenarSeriesTemporalesPorEstacion(infoSeriesTemporales)
+        )
 
-    def buscarCambioEstado(self):
-        pass
+        infoDatosSismicos: InfoDatosSismicos = {
+            "alcanceSismico": self._alcanceSismo.nombre,
+            "origenGeneracion": self._origenDeGeneracion.nombre,
+            "clasificacion": self._clasificacion.nombre,
+            "infoSeriesTemporales": infoSerieTemporalesOrdenadas,
+        }
+        return infoDatosSismicos
 
-    def crearCambioEstado(self, nuevoEstado: Estado) -> None:
-        pass
+    def getDatoSeriesTemporales(self) -> list[InfoSerieTemporal]:
+        """
+        rtype: list[InfoSerieTemporal]
+        return: diccionario con todos los detalles de todas las muestras de todas las series temporales
+        """
+        infoSeriesTemporales: list[InfoSerieTemporal] = [
+            serie.getDatos() for serie in self._seriesTemporales
+        ]
+        return infoSeriesTemporales
 
-    def ordenarSeriesTemporalesPorEstacion(self):
-        pass
+    def ordenarSeriesTemporalesPorEstacion(
+        self, infoSeriesTemporales: list[InfoSerieTemporal]
+    ) -> list[InfoSerieTemporal]:
+        return sorted(infoSeriesTemporales, key=lambda x: x["estacionSismologica"])
 
-    def rechazar(self):
-        pass
+    def revisar(
+        self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
+    ) -> None:
+        cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
+        cambioEstadoActual.fechaHoraFin = datetime.now()
+        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+
+    def rechazar(
+        self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
+    ) -> None:
+        cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
+        cambioEstadoActual.fechaHoraFin = datetime.now()
+        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+
+    def buscarCambioEstado(self) -> CambioEstado:
+        cambioEstadoActual: CambioEstado = [
+            cambio for cambio in self._cambiosEstado if cambio.esEstadoActual()
+        ][0]
+        return cambioEstadoActual
+
+    def crearCambioEstado(
+        self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
+    ) -> None:
+        nuevoCambioEstado: CambioEstado = CambioEstado(
+            nuevoEstado, responsable, fechaHoraInicio
+        )
+        self._cambiosEstado.append(nuevoCambioEstado)
