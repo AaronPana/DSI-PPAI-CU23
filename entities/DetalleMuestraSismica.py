@@ -5,7 +5,13 @@ class DetalleMuestraSismica:
 
     def __init__(self, tipoDeDato: TipoDeDato, valor) -> None:
         self._tipoDeDato: TipoDeDato = tipoDeDato
-        self.valor = valor
+        # El tipo del valor va a depender de "tipoDeDato"
+        self._valor = valor
 
-    def getDatos(self):
-        pass
+    def getDatos(self) -> str:
+        """
+        rtype: str
+        return: valor y tipo de dato
+        """
+        nombreUnidad: str = self._tipoDeDato.nombreUnidadMedida
+        return f"{self._valor} {nombreUnidad}"

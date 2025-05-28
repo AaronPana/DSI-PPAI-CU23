@@ -4,17 +4,17 @@ class Estado:
         self._ambito: str = ambito
         self._nombreEstado: str = nombreEstado
 
-    def esAutoDetectado(self):
-        pass
+    def esAutoDetectado(self) -> bool:
+        return self._nombreEstado == "AUTODETECTADO"
 
-    def esPendienteRevision(self):
-        pass
+    def esPendienteRevision(self) -> bool:
+        return self._nombreEstado == "PENDIENTE_REVISION"
 
-    def esAmbitoEventoSismico(self):
-        pass
+    def esAmbitoEventoSismico(self) -> bool:
+        return self._ambito == "EVENTO_SISMICO"
 
-    def esBloqueadoEnRevision(self):
-        pass
+    def esBloqueadoEnRevision(self) -> bool:
+        return self._nombreEstado == "BLOQUEADO_REVISION"
 
-    def esRechazado(self):
-        pass
+    def esRechazado(self) -> bool:
+        return self._nombreEstado == "RECHAZADO"

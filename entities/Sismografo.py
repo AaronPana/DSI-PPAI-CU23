@@ -32,7 +32,7 @@ class Sismografo:
         # No deberia recibir los cambios de estado sino irlos creando y asignando los estados
         self._cambiosEstado: list[CambioEstado] = []
         # Primer cambio de estado
-        self.crearCambioEstado(self._estadoActual)
+        # self.crearCambioEstado(self._estadoActual)
 
     # Este metodo no deberia usarse
     # Solo se crea para poder crear el setter del Modelo de Dominio
@@ -44,7 +44,7 @@ class Sismografo:
     @estadoActual.setter
     def estadoActual(self, nuevoEstado: Estado) -> None:
         self._estadoActual = nuevoEstado
-        self.crearCambioEstado(nuevoEstado)
+        # self.crearCambioEstado(nuevoEstado)
 
     @property
     def identificadorSismografo(self) -> str:
@@ -53,5 +53,7 @@ class Sismografo:
     def getNombreEstacion(self) -> str:
         return self._estacionSismologica.nombre
 
-    def crearCambioEstado(self, nuevoEstado: Estado) -> None:
-        pass
+    # No implementamos un metodo para crear cambios de estado en la clase sismografo
+    # ya que no se requiere para el CU23
+    # def crearCambioEstado(self, nuevoEstado: Estado) -> None:
+    #     pass
