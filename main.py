@@ -9,7 +9,7 @@ class Main:
 
     @staticmethod
     def registrarRevisionManual(page):
-        pass
+        Main._boundaryRegistrarRevision.registrarRevisionManual(page)
 
 
 ft.app(target=Main.registrarRevisionManual)
