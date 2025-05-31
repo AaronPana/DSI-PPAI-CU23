@@ -1,5 +1,7 @@
 from datetime import datetime
 from entities.EventoSismico import EventoSismico
+from entities.MagnitudRichter import MagnitudRichter
+from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from data.estados import estado_data
 from data.empleados import empleado_data
 from data.clasificacionesSismos import clasificacionSismo_data
@@ -7,7 +9,7 @@ from data.alcancesSismos import alcanceSismo_data
 
 eventoSismico0 = EventoSismico(
     fechaHoraOcurrencia=datetime(2025, 5, 19, 19, 5),
-    fechaHoraFin=None,
+    fechaHoraFin=datetime(2025, 5, 19, 19, 40),
     latitudEpicentro=-34.6037,
     longitudEpicentro=-58.3816,
     latitudHipocentro=-34.6037,
@@ -15,8 +17,8 @@ eventoSismico0 = EventoSismico(
     valorMagnitud=4.5,
 
     clasificacion=clasificacionSismo_data[1],
-    magnitud=None,
-    origenDeGeneracion=None,
+    magnitud=MagnitudRichter(),
+    origenDeGeneracion=OrigenDeGeneracion(),
     alcanceSismo=alcanceSismo_data[0],
     estadoActual=estado_data[3],
     analistaSupervisor=empleado_data[2]
@@ -32,14 +34,15 @@ eventoSismico1 = EventoSismico(
     valorMagnitud=5.2,
 
     clasificacion=clasificacionSismo_data[1],
-    magnitud=None,
-    origenDeGeneracion=None,
+    magnitud=MagnitudRichter(),
+    origenDeGeneracion=OrigenDeGeneracion(),
     alcanceSismo=alcanceSismo_data[0],
     estadoActual=estado_data[7],
     analistaSupervisor=empleado_data[2]
 )
 
 eventoSismico_data = [eventoSismico0, eventoSismico1]
+
 #El eventoSismico0 posee las SeriesTemporales -> SerieTemporal0, SerieTemporal1
 # y posee el cambio de estado CambioEstado0
 #El eventoSismico1 posee la Serie Temporal -> SerieTemporal2
