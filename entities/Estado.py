@@ -1,5 +1,3 @@
-from estados_diccionario import estados_data
-
 class Estado:
 
     def __init__(self, ambito: str, nombreEstado: str) -> None:

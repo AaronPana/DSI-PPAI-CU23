@@ -8,16 +8,16 @@ class EstacionSismologica:
         codigoEstacion: str,
         documentoCertificacionAdq: str,
         fechaSolicitudCertificacion: date,
-        latitud: str,
-        longitud: str,
+        latitud: float,
+        longitud: float,
         nombre: str,
         nroCertificacionAdquisicion: int,
     ) -> None:
         self._codigoEstacion: str = codigoEstacion
         self._documentoCertificacionAdq: str = documentoCertificacionAdq
         self._fechaSolicitudCertificacion: date = fechaSolicitudCertificacion
-        self._latitud: str = latitud
-        self._longitud: str = longitud
+        self._latitud: float = latitud
+        self._longitud: float = longitud
         self._nombre: str = nombre
         self._nroCertificacionAdquisicion: int = nroCertificacionAdquisicion
 
