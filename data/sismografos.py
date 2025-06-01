@@ -19,7 +19,6 @@ Sismografo0 = Sismografo(
 Sismografo0._cambiosEstado.append(
     CambioEstado(estado_data[0], Empleado0, datetime.now())
 )
-
 Sismografo0._seriesTemporales = [serieTemporal_data[0]]
 
 Sismografo1 = Sismografo(
@@ -30,12 +29,8 @@ Sismografo1 = Sismografo(
     estadoActual=estado_data[0],
     modeloSismografo=ModeloSismografo(),
 )
-
-Sismografo1._cambiosEstado.append(
-    CambioEstado(estado_data[0], Empleado0, datetime.now())
-)
-
-Sismografo1._seriesTemporales = [serieTemporal_data[1]]
+Sismografo1._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
+Sismografo1._seriesTemporales = [serieTemporal_data[1], serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
 
 Sismografo2 = Sismografo(
     fechaAdquisicion=date(2009, 12, 2),
@@ -45,12 +40,7 @@ Sismografo2 = Sismografo(
     estadoActual=estado_data[0],
     modeloSismografo=ModeloSismografo(),
 )
-
-Sismografo2._cambiosEstado.append(
-    CambioEstado(estado_data[0], Empleado0, datetime.now())
-)
-
+Sismografo2._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
 Sismografo2._seriesTemporales = [serieTemporal_data[2]]
 
 sismografo_data = [Sismografo0, Sismografo1, Sismografo2]
-# El sismografo n pertenece a la estacion sismologica n
