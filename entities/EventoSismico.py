@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any
 
 from entities.AlcanceSismo import AlcanceSismo
 from entities.CambioEstado import CambioEstado
@@ -22,10 +21,10 @@ class EventoSismico:
         self,
         fechaHoraFin: datetime,
         fechaHoraOcurrencia: datetime,
-        latitudEpicentro: str,
-        latitudHipocentro: str,
-        longitudEpicentro: str,
-        longitudHipocentro: str,
+        latitudEpicentro: float,
+        latitudHipocentro: float,
+        longitudEpicentro: float,
+        longitudHipocentro: float,
         valorMagnitud: float,
         clasificacion: ClasificacionSismo,
         magnitud: MagnitudRichter,
@@ -36,10 +35,10 @@ class EventoSismico:
     ) -> None:
         self._fechaHoraFin: datetime = fechaHoraFin
         self._fechaHoraOcurrencia: datetime = fechaHoraOcurrencia
-        self._latitudEpicentro: str = latitudEpicentro
-        self._latitudHipocentro: str = latitudHipocentro
-        self._longitudEpicentro: str = longitudEpicentro
-        self._longitudHipocentro: str = longitudHipocentro
+        self._latitudEpicentro: float = latitudEpicentro
+        self._latitudHipocentro: float = latitudHipocentro
+        self._longitudEpicentro: float = longitudEpicentro
+        self._longitudHipocentro: float = longitudHipocentro
         self._valorMagnitud: float = valorMagnitud
         self._clasificacion: ClasificacionSismo = clasificacion
         self._magnitud: MagnitudRichter = magnitud
@@ -75,19 +74,19 @@ class EventoSismico:
         return self._fechaHoraOcurrencia
 
     @property
-    def latitudEpicentro(self) -> str:
+    def latitudEpicentro(self) -> float:
         return self._latitudEpicentro
 
     @property
-    def longitudEpicentro(self) -> str:
+    def longitudEpicentro(self) -> float:
         return self._longitudEpicentro
 
     @property
-    def latitudHipocentro(self) -> str:
+    def latitudHipocentro(self) -> float:
         return self._latitudHipocentro
 
     @property
-    def longitudHipocentro(self) -> str:
+    def longitudHipocentro(self) -> float:
         return self._longitudHipocentro
 
     def esAutoDetectado(self) -> bool:
@@ -105,10 +104,10 @@ class EventoSismico:
             "fechaHoraOcurrencia": self._fechaHoraOcurrencia.strftime(
                 "%d/%m/%Y %H:%M:%S"
             ),
-            "latitudEpicentro": self._latitudEpicentro,
-            "longitudEpicentro": self._longitudEpicentro,
-            "latitudHipocentro": self._latitudHipocentro,
-            "longitudHipocentro": self._longitudHipocentro,
+            "latitudEpicentro": str(self._latitudEpicentro),
+            "longitudEpicentro": str(self._longitudEpicentro),
+            "latitudHipocentro": str(self._latitudHipocentro),
+            "longitudHipocentro": str(self._longitudHipocentro),
             "valorMagnitud": str(self._valorMagnitud),
         }
         return infoBasicaEventoSismico
@@ -120,7 +119,7 @@ class EventoSismico:
         incluye todos los detalles de todas las muestras de todas las series temporales
         """
 
-        infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatoSeriesTemporales()
+        infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatosSeriesTemporales()
 
         infoSerieTemporalesOrdenadas: list[InfoSerieTemporal] = (
             self.ordenarSeriesTemporalesPorEstacion(infoSeriesTemporales)
@@ -134,7 +133,7 @@ class EventoSismico:
         }
         return infoDatosSismicos
 
-    def getDatoSeriesTemporales(self) -> list[InfoSerieTemporal]:
+    def getDatosSeriesTemporales(self) -> list[InfoSerieTemporal]:
         """
         rtype: list[InfoSerieTemporal]
         return: diccionario con todos los detalles de todas las muestras de todas las series temporales
@@ -156,6 +155,8 @@ class EventoSismico:
         cambioEstadoActual.fechaHoraFin = datetime.now()
         self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
 
+    # La implementacion de revisar() y rechazar() es exactamente la msima debido a que
+    # se busca diferenciar los eventos tal cual esta en la maquia de estados
     def rechazar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
     ) -> None:

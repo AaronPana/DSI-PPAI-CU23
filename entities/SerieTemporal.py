@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any
 from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
 from entities.Sismografo import Sismografo
