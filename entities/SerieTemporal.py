@@ -4,7 +4,7 @@ from entities.MuestraSismica import MuestraSismica
 from entities.Sismografo import Sismografo
 
 
-InfoMuestra = dict[str, str | list[str]]
+InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 
 
@@ -37,7 +37,7 @@ class SerieTemporal:
         ]
 
         infoSerieTemporal: InfoSerieTemporal = {
-            "estacionSismologica": self._sismografo.getNombreEstacion(),
+            "estacionSismologica": self._sismografo.getNombreEstacionSismologica(),
             "fechaHoraRegistro": self._fechaHoraRegistro.strftime("%d/%m/%Y %H:%M:%S"),
             "frecuenciaMuestreo": str(self._frecuenciaMuestreo),
             "condicionAlarma": "SI" if self._condicionAlarma else "NO",

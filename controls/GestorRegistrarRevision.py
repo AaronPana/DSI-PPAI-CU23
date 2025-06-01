@@ -9,7 +9,7 @@ from data.sesiones import Sesion0
 from data.eventosSismicos import eventoSismico_data
 
 
-InfoMuestra = dict[str, str | list[str]]
+InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
@@ -38,15 +38,23 @@ class GestorRegistrarRevision:
 
         self._responsable: Empleado | None = None
 
-        self._sismograma: None = None
+        self._sismograma: str | None = None
 
-        self._tieneDatosValidosEventoSismico: bool = False
+        self._accionesRevision: list[str] = [
+            "CONFIRMAR",
+            "RECHAZAR",
+            "SOLICITAR REVISION",
+        ]
+
+        self._tieneDatosValidos: bool = False
 
     def seleccionDatosEventosSismicos(self) -> None:
-        self.obtenerEventoSismicoNoRevisado()
+        self.obtenerEventosSismicosNoRevisados()
         self.ordenarPorFechaHoraOcurrencia()
+        # TODO
+        # self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(self._datosEventosSismicosNoRevisados)
 
-    def obtenerEventoSismicoNoRevisado(self) -> None:
+    def obtenerEventosSismicosNoRevisados(self) -> None:
         for evento in self._eventos:
             if evento.esAutoDetectado() or evento.esPendienteRevision():
                 # Esta separacion de objetos y datos se hace debido a que
@@ -81,6 +89,12 @@ class GestorRegistrarRevision:
         self.revisarEventoSismico()
         self.buscarDetalleEventoSismico()
         self.generarSismograma()
+        # TODO
+        # self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._eventoSismicoSeleccionado.getDatos())
+        # self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
+        # self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa()
+        # self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()
+        # self._boundaryRegistrarRevision.solicitarAccionRevision(self._accionesRevision)
 
     def revisarEventoSismico(self) -> None:
         nuevoEstado: Estado = [
@@ -127,19 +141,28 @@ class GestorRegistrarRevision:
     def buscarDetalleEventoSismico(self) -> None:
         if self._eventoSismicoSeleccionado is not None:
             self._datosEventoSismico = (
-                self._eventoSismicoSeleccionado.getDatosSismicos()
+                self._eventoSismicoSeleccionado.getDatosEventoSismico()
             )
 
-    def generarSismograma(self):
-        pass
+    def generarSismograma(self) -> None:
+        self._sismograma = "../data/sismograma.png"
 
-    def tomarSeleccionRevision(self, revision: str) -> None:
-        self.validarDatosEventoSismico()
-        if revision == "RECHAZAR":
+    def tomarSeleccionRevision(self, revision: str, datosEvento: list[str]) -> None:
+        self._tieneDatosValidos = self.validarDatosEventoSismico(revision, datosEvento)
+        if self._tieneDatosValidos and revision == "RECHAZAR":
             self.rechazarEventoSismico()
+        # Si se quisiera seguir con el flujo, registrando otra accion en otro evento...
+        # self.seleccionDatosEventosSismicos()
 
-    def validarDatosEventoSismico(self):
-        pass
+    # TODO valdiaciones o por lo menos asegurar el formato de recepcion de los datosEvento desde el boundary
+    def validarDatosEventoSismico(self, revision: str, datosEvento: list[str]) -> bool:
+        condiciones = [
+            revision in self._accionesRevision,
+            datosEvento[0] != "",  # magnitud
+            datosEvento[1] != "",  # alcance
+            datosEvento[2] != "",  # origen
+        ]
+        return all(condiciones)
 
     def finCasoUso(self):
         pass

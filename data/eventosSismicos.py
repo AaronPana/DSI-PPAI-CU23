@@ -1,7 +1,6 @@
 from datetime import datetime
 from entities.EventoSismico import EventoSismico
 from entities.MagnitudRichter import MagnitudRichter
-from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from data.estados import estado_data
 from data.empleados import empleado_data
 from data.clasificacionesSismos import clasificacionSismo_data
@@ -18,7 +17,7 @@ eventoSismico0 = EventoSismico(
     latitudHipocentro=-34.6037,
     longitudHipocentro=-58.3816,
     valorMagnitud=4.5,
-    clasificacion=clasificacionSismo_data[1],
+    clasificacionSisimo=clasificacionSismo_data[1],
     magnitud=MagnitudRichter(),
     origenDeGeneracion=origenDeGeneracion_data[0],
     alcanceSismo=alcanceSismo_data[0],
@@ -38,7 +37,7 @@ eventoSismico1 = EventoSismico(
     latitudHipocentro=-34.6040,
     longitudHipocentro=-58.3810,
     valorMagnitud=5.2,
-    clasificacion=clasificacionSismo_data[1],
+    clasificacionSisimo=clasificacionSismo_data[1],
     magnitud=MagnitudRichter(),
     origenDeGeneracion=origenDeGeneracion_data[2],
     alcanceSismo=alcanceSismo_data[0],

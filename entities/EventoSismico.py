@@ -10,7 +10,7 @@ from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from entities.SerieTemporal import SerieTemporal
 
 
-InfoMuestra = dict[str, str | list[str]]
+InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
@@ -26,7 +26,7 @@ class EventoSismico:
         longitudEpicentro: float,
         longitudHipocentro: float,
         valorMagnitud: float,
-        clasificacion: ClasificacionSismo,
+        clasificacionSisimo: ClasificacionSismo,
         magnitud: MagnitudRichter,
         origenDeGeneracion: OrigenDeGeneracion,
         alcanceSismo: AlcanceSismo,
@@ -40,7 +40,7 @@ class EventoSismico:
         self._longitudEpicentro: float = longitudEpicentro
         self._longitudHipocentro: float = longitudHipocentro
         self._valorMagnitud: float = valorMagnitud
-        self._clasificacion: ClasificacionSismo = clasificacion
+        self._clasificacionSisimo: ClasificacionSismo = clasificacionSisimo
         self._magnitud: MagnitudRichter = magnitud
         self._origenDeGeneracion: OrigenDeGeneracion = origenDeGeneracion
         self._alcanceSismo: AlcanceSismo = alcanceSismo
@@ -54,8 +54,8 @@ class EventoSismico:
         return self._origenDeGeneracion.nombre
 
     @property
-    def clasificacion(self) -> str:
-        return self._clasificacion.nombre
+    def clasificacionSisimo(self) -> str:
+        return self._clasificacionSisimo.nombre
 
     @property
     def alcanceSismico(self) -> str:
@@ -97,34 +97,38 @@ class EventoSismico:
         return: diccionarios de datos basicos del evento sismico
         """
         infoBasicaEventoSismico: dict[str, str] = {
-            "fechaHoraOcurrencia": self._fechaHoraOcurrencia.strftime(
+            "fechaHoraOcurrencia": self.fechaHoraOcurrencia.strftime(
                 "%d/%m/%Y %H:%M:%S"
             ),
-            "latitudEpicentro": str(self._latitudEpicentro),
-            "longitudEpicentro": str(self._longitudEpicentro),
-            "latitudHipocentro": str(self._latitudHipocentro),
-            "longitudHipocentro": str(self._longitudHipocentro),
-            "valorMagnitud": str(self._valorMagnitud),
+            "latitudEpicentro": str(self.latitudEpicentro),
+            "longitudEpicentro": str(self.longitudEpicentro),
+            "latitudHipocentro": str(self.latitudHipocentro),
+            "longitudHipocentro": str(self.longitudHipocentro),
+            "valorMagnitud": str(self.valorMagnitud),
         }
         return infoBasicaEventoSismico
 
-    def getDatosSismicos(self) -> InfoDatosSismicos:
+    def getDatosEventoSismico(self) -> InfoDatosSismicos:
         """
         rtype: InfoDatosSismicos
         return: diccionario con datos sismicos del evento que
         incluye todos los detalles de todas las muestras de todas las series temporales
         """
 
+        nombreAlcanceSismico = self._alcanceSismo.nombre
+        nombreOrigenDeGeneracion = self._origenDeGeneracion.nombre
+        nombreClasificacionSismo = self._clasificacionSisimo.nombre
+
         infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatosSeriesTemporales()
 
         infoSerieTemporalesOrdenadas: list[InfoSerieTemporal] = (
-            self.ordenarSeriesTemporalesPorEstacion(infoSeriesTemporales)
+            self.ordenarSeriesTemporalesPorEstacionSismologica(infoSeriesTemporales)
         )
 
         infoDatosSismicos: InfoDatosSismicos = {
-            "alcanceSismico": self._alcanceSismo.nombre,
-            "origenGeneracion": self._origenDeGeneracion.nombre,
-            "clasificacion": self._clasificacion.nombre,
+            "alcanceSismico": nombreAlcanceSismico,
+            "origenGeneracion": nombreOrigenDeGeneracion,
+            "clasificacion": nombreClasificacionSismo,
             "infoSeriesTemporales": infoSerieTemporalesOrdenadas,
         }
         return infoDatosSismicos
@@ -139,7 +143,7 @@ class EventoSismico:
         ]
         return infoSeriesTemporales
 
-    def ordenarSeriesTemporalesPorEstacion(
+    def ordenarSeriesTemporalesPorEstacionSismologica(
         self, infoSeriesTemporales: list[InfoSerieTemporal]
     ) -> list[InfoSerieTemporal]:
         return sorted(infoSeriesTemporales, key=lambda x: x["estacionSismologica"])

@@ -50,7 +50,7 @@ class Sismografo:
     def identificadorSismografo(self) -> str:
         return self._identificadorSismografo
 
-    def getNombreEstacion(self) -> str:
+    def getNombreEstacionSismologica(self) -> str:
         return self._estacionSismologica.nombre
 
     # No implementamos un metodo para crear cambios de estado en la clase sismografo

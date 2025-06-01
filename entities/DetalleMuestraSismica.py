@@ -8,10 +8,15 @@ class DetalleMuestraSismica:
         # El tipo del valor va a depender de "tipoDeDato"
         self._valor: float = valor
 
-    def getDatos(self) -> str:
+    def getDatos(self) -> dict[str, str]:
         """
         rtype: str
         return: valor y tipo de dato
         """
-        nombreUnidad: str = self._tipoDeDato.nombreUnidadMedida
-        return f"{self._valor} {nombreUnidad}"
+        infoTipoDeDato = self._tipoDeDato.getDatos()
+        infoDetalle = {
+            "denominacion": infoTipoDeDato["denominacion"],
+            "valor": str(self._valor),
+            "nombreUnidadMedida": infoTipoDeDato["nombreUnidadMedida"],
+        }
+        return infoDetalle
