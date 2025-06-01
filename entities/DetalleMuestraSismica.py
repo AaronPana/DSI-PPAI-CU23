@@ -3,10 +3,10 @@ from entities.TipoDeDato import TipoDeDato
 
 class DetalleMuestraSismica:
 
-    def __init__(self, tipoDeDato: TipoDeDato, valor) -> None:
+    def __init__(self, tipoDeDato: TipoDeDato, valor: float) -> None:
         self._tipoDeDato: TipoDeDato = tipoDeDato
         # El tipo del valor va a depender de "tipoDeDato"
-        self._valor = valor
+        self._valor: float = valor
 
     def getDatos(self) -> str:
         """
