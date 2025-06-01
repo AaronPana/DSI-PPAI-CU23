@@ -16,7 +16,7 @@ EstacionSismologica1 = EstacionSismologica(
     documentoCertificacionAdq="certificacionAdquisicion2003.pdf",
     fechaSolicitudCertificacion=datetime(2003, 5, 5, 8, 30),
     latitud=-34.6050,
-    longitud=-58.3800, 
+    longitud=-58.3800,
     nombre="Estacion Simologia Bs As SUR",
     nroCertificacionAdquisicion=3563,
 )
@@ -32,4 +32,8 @@ EstacionSismologica2 = EstacionSismologica(
     nroCertificacionAdquisicion=3563,
 )
 
-estacionSismologica_data = [EstacionSismologica0, EstacionSismologica1, EstacionSismologica2]
+estacionSismologica_data = [
+    EstacionSismologica0,
+    EstacionSismologica1,
+    EstacionSismologica2,
+]

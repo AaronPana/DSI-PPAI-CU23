@@ -12,8 +12,19 @@ Estado8 = Estado(ambito="EVENTO_SISMICO", nombreEstado="RECHAZADO")
 Estado9 = Estado(ambito="EVENTO_SISMICO", nombreEstado="PENDIENTE_CIERRE")
 Estado10 = Estado(ambito="EVENTO_SISMICO", nombreEstado="CERRADO")
 
-estado_data = [Estado0, Estado1,  Estado2, Estado3, Estado4, Estado5, Estado6, Estado7, Estado8, Estado9, Estado10]
- 
+estado_data = [
+    Estado0,
+    Estado1,
+    Estado2,
+    Estado3,
+    Estado4,
+    Estado5,
+    Estado6,
+    Estado7,
+    Estado8,
+    Estado9,
+    Estado10,
+]
 
 
 # El atributo ambito en la clase Estado permite diferenciar a qué tipo de objeto(como un Evento Sísmico, un Sismógrafo, etc.)

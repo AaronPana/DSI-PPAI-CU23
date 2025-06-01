@@ -46,12 +46,8 @@ class EventoSismico:
         self._alcanceSismo: AlcanceSismo = alcanceSismo
         self._estadoActual: Estado = estadoActual
         self._analistaSupervisor: Empleado = analistaSupervisor
-        # Como debería implementarse la lógica de asociación ??
         self._seriesTemporales: list[SerieTemporal] = []
-        # No deberia recibir los cambios de estado sino irlos creando y asignando los estados
         self._cambiosEstado: list[CambioEstado] = []
-        # Primer cambio de estado
-        # self.crearCambioEstado(self._estadoActual)
 
     @property
     def origenDeGeneracion(self) -> str:
@@ -155,7 +151,7 @@ class EventoSismico:
         cambioEstadoActual.fechaHoraFin = datetime.now()
         self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
 
-    # La implementacion de revisar() y rechazar() es exactamente la msima debido a que
+    # La implementacion de revisar() y rechazar() es exactamente la misma debido a que
     # se busca diferenciar los eventos tal cual esta en la maquia de estados
     def rechazar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime

@@ -1,28 +1,28 @@
 from entities.TipoDeDato import TipoDeDato
 
 TipoDeDato0 = TipoDeDato(
-    denomicacion="Velocidad de onda",
+    denominacion="Velocidad de onda",
     nombreUnidadMedida="Km/seg",
-    valorUmbral=tuple[2, 9],
+    valorUmbral=(2, 9),
 )
 
 TipoDeDato1 = TipoDeDato(
-    denomicacion="Frecuencia de onda",
+    denominacion="Frecuencia de onda",
     nombreUnidadMedida="Hz",
-    valorUmbral=tuple[0, 50],
+    valorUmbral=(0, 50),
 )
 
 TipoDeDato2 = TipoDeDato(
-    denomicacion="Longitud",
+    denominacion="Longitud",
     nombreUnidadMedida="Km/ciclo",
-    valorUmbral=tuple[0, 100],
+    valorUmbral=(0, 100),
 )
 
 tipoDeDato_data = [TipoDeDato0, TipoDeDato1, TipoDeDato2]
 
-        # self._denominacion: str = denominacion
-        # self._nombreUnidadMedida: str = nombreUnidadMedida
-        # self._valorUmbral: tuple[int, int] = valorUmbral
+# self._denominacion: str = denominacion
+# self._nombreUnidadMedida: str = nombreUnidadMedida
+# self._valorUmbral: tuple[int, int] = valorUmbral
 
 
 # denominacion: Este atributo almacena el nombre descriptivo del tipo de dato sísmico. Por ejemplo,

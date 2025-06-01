@@ -4,6 +4,9 @@ from entities.Empleado import Empleado
 from entities.Estado import Estado
 from entities.EventoSismico import EventoSismico
 from entities.Sesion import Sesion
+from data.estados import estado_data
+from data.sesiones import Sesion0
+from data.eventosSismicos import eventoSismico_data
 
 
 InfoMuestra = dict[str, str | list[str]]
@@ -16,22 +19,21 @@ class GestorRegistrarRevision:
         self,
         boundaryRegistrarRevision: BoundaryRegistrarRevision,
         fechaHoraActual: datetime,
-        sesion: Sesion,
     ) -> None:
 
         self._boundaryRegistrarRevision: BoundaryRegistrarRevision = (
             boundaryRegistrarRevision
         )
         self._fechaHoraActual: datetime = fechaHoraActual
-        self._sesion: Sesion = sesion
+        self._sesion: Sesion = Sesion0
 
-        self._eventos: list[EventoSismico] = []
+        self._eventos: list[EventoSismico] = eventoSismico_data
         self._eventosSismicosNoRevisados: list[EventoSismico] = []
         self._datosEventosSismicosNoRevisados: list[dict[str, str]] = []
         self._eventoSismicoSeleccionado: EventoSismico | None = None
         self._datosEventoSismico: InfoDatosSismicos | None = None
 
-        self._estados: list[Estado] = []
+        self._estados: list[Estado] = estado_data
         self._estadoEvento: Estado | None = None
 
         self._responsable: Empleado | None = None
@@ -96,7 +98,7 @@ class GestorRegistrarRevision:
                 nuevoEstado, self._responsable, fechaHoraActual
             )
 
-    # La implementacion de revisarEventoSismico() y rechazarEventoSismico() es casi la msima debido a que
+    # La implementacion de revisarEventoSismico() y rechazarEventoSismico() es casi la misma debido a que
     # se busca diferenciar los eventos tal cual esta en la maquia de estados
     # En este caso ya no es necesario busacr el responsable
     def rechazarEventoSismico(self) -> None:
