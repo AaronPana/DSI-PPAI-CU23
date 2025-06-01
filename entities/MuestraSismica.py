@@ -2,7 +2,7 @@ from datetime import datetime
 from entities.DetalleMuestraSismica import DetalleMuestraSismica
 
 
-InfoMuestra = dict[str, str | list[str]]
+InfoMuestra = dict[str, str | list[dict[str, str]]]
 
 
 class MuestraSismica:
@@ -16,7 +16,7 @@ class MuestraSismica:
         rtype: InfoMuestra
         return: diccionario con fechaHoraMuestra y lista de detalles de la muestra
         """
-        datosDetalles: list[str] = [
+        datosDetalles: list[dict[str, str]] = [
             detalle.getDatos() for detalle in self._detallesMuestraSismica
         ]
 

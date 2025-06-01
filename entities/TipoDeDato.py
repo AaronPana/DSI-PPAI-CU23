@@ -18,3 +18,9 @@ class TipoDeDato:
 
     def esTuDenominacion(self, denomicacion: str) -> bool:
         return self._denominacion == denomicacion
+
+    def getDatos(self) -> dict[str, str]:
+        return {
+            "denominacion": self._denominacion,
+            "nombreUnidadMedida": self._nombreUnidadMedida,
+        }
