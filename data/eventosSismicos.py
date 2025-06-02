@@ -62,7 +62,8 @@ eventoSismico2 = EventoSismico(
     estadoActual=estado_data[3], #PENDIENTE_REVISION
     analistaSupervisor=empleado_data[2],
 )
-eventoSismico0._cambiosEstado = [cambioEstado_data[4], cambioEstado_data[5]] #PENDIENTE_REVISION
-eventoSismico0._seriesTemporales = [serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
+#aca se llamaba eventoSismico0 y se sobreescribian los datos que le pasaste en la linea 28-29. Supongo que error de tipeo
+eventoSismico2._cambiosEstado = [cambioEstado_data[4], cambioEstado_data[5]] #PENDIENTE_REVISION
+eventoSismico2._seriesTemporales = [serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
 
 eventoSismico_data = [eventoSismico0, eventoSismico1, eventoSismico2]

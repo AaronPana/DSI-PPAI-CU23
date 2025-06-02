@@ -90,8 +90,8 @@ class GestorRegistrarRevision:
 
         self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self.buscarDetalleEventoSismico())
         print("PASO_________________________-")
-        self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
-        self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa()
+        #self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma) ---------estaba mostrando el sismograma apenas se hace click
+        self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa(False)
         self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()
         self._boundaryRegistrarRevision.solicitarAccionRevision(self._accionesRevision)
 
@@ -137,11 +137,13 @@ class GestorRegistrarRevision:
     def getFechaHora(self) -> datetime:
         return datetime.now()
 
-    def buscarDetalleEventoSismico(self) -> None:
+    def buscarDetalleEventoSismico(self) -> dict:
         if self._eventoSismicoSeleccionado is not None:
             self._datosEventoSismico = (
                 self._eventoSismicoSeleccionado.getDatosEventoSismico()
             )
+            return self._eventoSismicoSeleccionado.getDatos()
+        return {}
 
     def generarSismograma(self) -> None:
         self._sismograma = "../data/sismograma.png"

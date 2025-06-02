@@ -90,8 +90,9 @@ class BoundaryRegistrarRevision:
         boton_modificar = ft.ElevatedButton("Modificar evento", on_click=self.modificarEvento)
         boton_guardar = ft.ElevatedButton("Guardar cambios", on_click=self.guardarCambiosEvento)
         boton_cancelar = ft.ElevatedButton("Cancelar cambios", on_click=self.cancelarCambiosEvento)
-        boton_ver_mapa = ft.ElevatedButton("Ver mapa", on_click=self.mostrarSismograma)
-        boton_ver_sismograma = ft.ElevatedButton("Ver Sismograma", on_click=self.mostrarSismograma)
+        boton_ver_mapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarSismograma())
+
+        #boton_ver_sismograma = ft.ElevatedButton("Ver Sismograma", on_click=self.mostrarSismograma)
 
         # Sección detalle evento
         self.formulario_edicion = ft.Column([
@@ -159,7 +160,7 @@ class BoundaryRegistrarRevision:
         self._page.theme_mode = ft.ThemeMode.LIGHT
         self._page.title = "Red Sísmica"
         self._page.scroll = ft.ScrollMode.AUTO
-        self._page.window.width = 1300
+        self._page.window.width = 1000
         self._page.window.height = 760
         self._page.window.resizable = False
 
@@ -201,15 +202,13 @@ class BoundaryRegistrarRevision:
         self.formulario_edicion.visible = True
         self._page.update()
     
-    def mostrarSismograma(self, imagen_path):
-        self.imagen_mapa.src = imagen_path
-        self.contenedor_mapa.visible = True
+    def mostrarSismograma(self, e=None):
         self.imagen_mapa.visible = True
         self._page.update()
 
     def habilitarOpcionVisualizarMapa(self, bool):
-        self.contenedor_mapa.visible = bool
-        self.imagen_mapa.visible = bool
+        self.contenedor_mapa.visible = True
+        self.mostrarSismograma
     
     def habilitarModificarDatosEventoSismico(self): #no van?
         pass
@@ -296,9 +295,9 @@ class BoundaryRegistrarRevision:
 
     # metodos
 
-    
-    def mostrarDatosEventoSismico(self, datos_evento):
-        self.eventoSeleccionado(datos_evento)
+    #Comentado porque posiblemente sea una solucion
+    #def mostrarDatosEventoSismico(self, datos_evento):
+    #    self.eventoSeleccionado(datos_evento)
 
-    def solicitarAccionRevision(self):
+    def solicitarAccionRevision(self, acciones_revision):
         pass
