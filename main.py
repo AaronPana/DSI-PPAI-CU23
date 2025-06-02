@@ -12,7 +12,7 @@ class Main:
         self.page.scroll = ft.ScrollMode.AUTO
         self.page.window_width = 500
         self.page.window_height = 250
-        self.page.window_resizable = False
+        self.page.window_resizable = True
         self.inicializar_relaciones()
 
         self.boundary_registrar = BoundaryRegistrarRevision(self.page)

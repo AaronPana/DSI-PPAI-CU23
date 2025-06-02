@@ -90,7 +90,7 @@ class GestorRegistrarRevision:
         self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._datosEventoSismico)
         self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
         self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa(True)
-        self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()
+        self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico(True)
         self._boundaryRegistrarRevision.solicitarAccionRevision(self._accionesRevision)
 
     def revisarEventoSismico(self) -> None:
