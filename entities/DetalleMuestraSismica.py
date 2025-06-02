@@ -10,8 +10,8 @@ class DetalleMuestraSismica:
 
     def getDatos(self) -> dict[str, str]:
         """
-        rtype: str
-        return: valor y tipo de dato
+        rtype: dict[str, str]
+        return: denominacion, valor y tipo de dato
         """
         infoTipoDeDato = self._tipoDeDato.getDatos()
         infoDetalle = {
