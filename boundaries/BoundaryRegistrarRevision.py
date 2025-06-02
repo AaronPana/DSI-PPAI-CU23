@@ -51,7 +51,7 @@ class BoundaryRegistrarRevision:
         
         self.imagen_mapa = ft.Image(
             key="mapaSismograma",
-            src="https://picsum.photos/400/250",  
+            src="../data/sismograma.png",  
             visible=False,
             width=400,
             height=250,
@@ -186,6 +186,9 @@ class BoundaryRegistrarRevision:
             self._page.update()
     
     def mostrarDatosEventoSismico(self, evento):
+        self.imagen_mapa.visible = False
+        self._page.update()
+
         evento_formateado = {
             "Fecha": evento["fechaHoraOcurrencia"].split(" ")[0],
             "Hora": evento["fechaHoraOcurrencia"].split(" ")[1],
@@ -194,6 +197,9 @@ class BoundaryRegistrarRevision:
             "Profundidad": evento.get("latitudHipocentro", ""), 
             "Magnitud": evento["valorMagnitud"]
         }
+
+        self.evento_original = evento_formateado.copy()
+
         for campo in self.nombres_campos:
             self.campos_evento[campo].value = str(evento_formateado.get(campo, ""))
             self.campos_evento[campo].disabled = True
@@ -251,10 +257,27 @@ class BoundaryRegistrarRevision:
             for campo in self.nombres_campos
         }
 
+        self.evento_original = datos_actualizados.copy()
+
         for campo in self.nombres_campos:
             self.campos_evento[campo].disabled = True
 
-        self._page.update()
+       # REFLEJAR CAMBIOS EN LA GRILLA
+        index_seleccionado = next(
+            (i for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows) if row.selected),
+            None
+        )
+        if index_seleccionado is not None:
+            fila = self._grillaEventosSismicosNoRevisados.rows[index_seleccionado]
+            fila.cells[0].content.value = f"{datos_actualizados['Fecha']} {datos_actualizados['Hora']}"
+            fila.cells[1].content.value = datos_actualizados["Latitud"]
+            fila.cells[2].content.value = datos_actualizados["Longitud"]
+            fila.cells[3].content.value = datos_actualizados["Profundidad"]
+            fila.cells[4].content.value = "0"  # Si tenés campo para longitud hipocentro, agregalo aquí
+            fila.cells[5].content.value = datos_actualizados["Magnitud"]
+    
+
+            self._page.update()
 
     def cancelarCambiosEvento(self, e):
         for campo in self.nombres_campos:

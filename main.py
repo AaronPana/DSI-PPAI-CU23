@@ -10,7 +10,7 @@ class Main:
         self.page.theme_mode = ft.ThemeMode.LIGHT
         self.page.title = "Red Sísmica"
         self.page.scroll = ft.ScrollMode.AUTO
-        self.page.window_width = 700
+        self.page.window_width = 500
         self.page.window_height = 250
         self.page.window_resizable = False
 
