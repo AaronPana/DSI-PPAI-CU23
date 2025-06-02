@@ -8,7 +8,16 @@ class BoundaryRegistrarRevision:
         self._gestorRegistrarRevision: GestorRegistrarRevision = (GestorRegistrarRevision(self, datetime.now()))
         self._page: ft.Page = page
 
-        #ATRIBUTOS FALTANTES
+        # Configuración inicial de la página
+        self._page.theme_mode = ft.ThemeMode.LIGHT
+        self._page.title = "Red Sísmica"
+        self._page.scroll = ft.ScrollMode.AUTO
+        self._page.window_width = 1200
+        self._page.window_height = 750
+        self._page.window_resizable = True
+        self._page.padding = 20
+
+        # ATRIBUTOS FALTANTES
         self.campos_evento = {}
         self.nombres_campos = ["Fecha", "Hora", "Latitud", "Longitud",
             "Profundidad", "Magnitud"]
@@ -19,50 +28,124 @@ class BoundaryRegistrarRevision:
                 expand=True
             )
 
+        # Botones
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico", on_click=lambda e: self.guardarCambiosEvento)
         self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion", on_click=lambda e: self.cancelarCambiosEvento)
         self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelarCasoUso)
         self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa)
 
-        self.imagen_sismograma = ft.Image(key="mapaSismograma", src="../data/sismograma.png",
-            visible=False, width=400, height=250, fit=ft.ImageFit.CONTAIN,)
+        # Controles de acciones
+        self._dropdownAccionRevision = ft.Dropdown(
+            label="Acción de revisión",
+            options=[
+                ft.dropdown.Option("CONFIRMAR"),
+                ft.dropdown.Option("RECHAZAR"),
+                ft.dropdown.Option("SOLICITAR REVISION")
+            ],
+            width=300
+        )
+        self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento))
+
+        # Sismograma
+        self.imagen_sismograma = ft.Image(
+            key="mapaSismograma", 
+            src="../data/sismograma.png",
+            visible=False, 
+            width=400, 
+            height=250, 
+            fit=ft.ImageFit.CONTAIN
+        )
         self.contenedor_sismograma = ft.Container(
             content=ft.Column([
                 ft.Text("Mapa Sísmico", size=16, weight="bold", color=ft.Colors.BLUE_800, text_align=ft.TextAlign.CENTER),
                 ft.Container(content=self.imagen_sismograma, alignment=ft.alignment.center, expand=True)
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=10),
-            width=420, height=300, bgcolor=ft.Colors.GREY_100, border_radius=10,
-            padding=15, alignment=ft.alignment.center, visible=False
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=10),
+            width=420, 
+            height=300, 
+            bgcolor=ft.Colors.GREY_100, 
+            border_radius=10,
+            padding=15, 
+            alignment=ft.alignment.center, 
+            visible=False
         )
 
+        # Formulario de edición
         self.formulario_edicion = ft.Column([
             ft.Text("Detalles del evento sísmico seleccionado", size=20, weight="bold"),
-            ft.Row([
-                ft.Column([
-                    *[self.campos_evento[campo] for campo in self.nombres_campos]], expand=1)
-            ])
+            ft.Row([ft.Column([*[self.campos_evento[campo] for campo in self.nombres_campos]], expand=1)])
         ], visible=False)
 
-        #ATRIBUTOS ESCRITOS DEL BOUNDARY
-
+        # Eventos sísmicos no revisados
         self._eventosSismicosNoRevisados = []
-        self._grillaEventosSismicosNoRevisados: ft.DataTable = ft.DataTable(
+        self._grillaEventosSismicosNoRevisados = ft.DataTable(
             columns=[
-                ft.DataColumn(label=ft.Text("Fecha y Hora de Ocurrencia")),
-                ft.DataColumn(label=ft.Text("Latitud Epicentro")),
-                ft.DataColumn(label=ft.Text("Longitud Epicentro")),
-                ft.DataColumn(label=ft.Text("Latitud Hipocentro")),
-                ft.DataColumn(label=ft.Text("Longitud Hipocentro")),
+                ft.DataColumn(label=ft.Text("Fecha y Hora")),
+                ft.DataColumn(label=ft.Text("Lat. Epicentro")),
+                ft.DataColumn(label=ft.Text("Long. Epicentro")),
+                ft.DataColumn(label=ft.Text("Lat. Hipocentro")),
+                ft.DataColumn(label=ft.Text("Long. Hipocentro")),
                 ft.DataColumn(label=ft.Text("Magnitud"))
             ],
-            rows=[], heading_row_color=ft.Colors.BLUE_800
+            rows=[], 
+            heading_row_color=ft.Colors.BLUE_800,
+            expand=True
         )
+
+        # Detalle del evento seleccionado
         self._grillaEventoSismicoSeleccionado = ft.Container(
             content=ft.ListView(controls=[], expand=True, spacing=10, auto_scroll=False),
-            visible=False, width=950, height=280, bgcolor=ft.Colors.GREY_100, border_radius=10, padding=10
+            visible=False, 
+            width=950, 
+            height=280, 
+            bgcolor=ft.Colors.GREY_100, 
+            border_radius=10, 
+            padding=10
         )
+
+        # Barra de botones superiores
+        self.barra_superior = ft.Row(
+            controls=[self._btnCancelarCU],
+            alignment=ft.MainAxisAlignment.END
+        )
+
+        # Barra de botones de edición
+        self.barra_edicion = ft.Row(
+            controls=[self._btnModificar, self._btnGuardar, self._btnCancelar],
+            visible=False,
+            spacing=10
+        )
+
+        # Barra de acciones de revisión
+        self.barra_acciones = ft.Row(
+            controls=[self._dropdownAccionRevision, self._btnRegistrarAccion, self._btnVisualizarMapa],
+            visible=False,
+            spacing=10
+        )
+
+        # Contenedor principal
+        self.contenedor_principal = ft.Column(
+            controls=[
+                self.barra_superior,
+                ft.Text("Eventos Sísmicos No Revisados", size=18, weight="bold"),
+                ft.Container(self._grillaEventosSismicosNoRevisados, height=200),
+                ft.Divider(),
+                ft.Text("Detalle del Evento Seleccionado", size=18, weight="bold"),
+                self._grillaEventoSismicoSeleccionado,
+                ft.Row([
+                    self.contenedor_sismograma,
+                    ft.Column([
+                        self.formulario_edicion,
+                        self.barra_edicion
+                    ], expand=True)
+                ], spacing=20),
+                self.barra_acciones
+            ],
+            spacing=15,
+            expand=True
+        )
+
+
 
     #METODOS DE BOUNDARY
 
@@ -70,20 +153,8 @@ class BoundaryRegistrarRevision:
         self.habilitarVentana(evento)
 
     def habilitarVentana(self, evento):
-        self._page.theme_mode = ft.ThemeMode.LIGHT
-        self._page.title = "Red Sísmica"
-        self._page.scroll = ft.ScrollMode.AUTO
-        self._page.window.width = 2700
-        self._page.window.height = 750
-        self._page.window.resizable = True
-
+        self._page.add(self.contenedor_principal)
         self._gestorRegistrarRevision.seleccionDatosEventosSismicos()
-        self._page.add(
-            self._btnCancelarCU,
-            self._grillaEventosSismicosNoRevisados,
-            self._grillaEventoSismicoSeleccionado,
-            self.contenedor_sismograma,
-        )
 
     def mostrarDatosEventosSismicos(self, datos_eventos):
         self._eventosSismicosNoRevisados = datos_eventos
@@ -179,48 +250,49 @@ class BoundaryRegistrarRevision:
 
 
     def habilitarOpcionVisualizarMapa(self, bool):
-        if bool:
-            self._page.add(self._btnVisualizarMapa)
+        self.barra_acciones.visible = bool
+        self._page.update()
     
     def mostrarMapa(self):
         pass
     
     def habilitarModificarDatosEventoSismico(self, habilitar: bool):
-        if habilitar:
-            if self._btnModificar not in self._page.controls:
-                self._page.controls.append(self._btnModificar)
-        else:
-            if self._btnModificar in self._page.controls:
-                self._page.controls.remove(self._btnModificar)
+        self.barra_edicion.visible = habilitar
         self._page.update()
 
-
     def modificarEvento(self, e):
-        self.formulario_edicion.visible = True
         for campo in self.nombres_campos:
             self.campos_evento[campo].disabled = False
-        if self.formulario_edicion not in self._page.controls:
-            self._page.controls.append(self.formulario_edicion)
-        self._page.add(self._btnGuardar, self._btnCancelar)
+
+        self._page.update()
+
+    # def modificarEvento(self, e):
+    #     self.formulario_edicion.visible = True
+    #     for campo in self.nombres_campos:
+    #         self.campos_evento[campo].disabled = False
+    #     if self.formulario_edicion not in self._page.controls:
+    #         self._page.controls.append(self.formulario_edicion)
+    #     self._page.add(self._btnGuardar, self._btnCancelar)
     
     def guardarCambiosEvento(self, e):
-        print("Guardar evento clickeado")
+        datos_actualizados = {
+            campo: self.campos_evento[campo].value
+            for campo in self.nombres_campos
+        }
+
+        for campo in self.nombres_campos:
+            self.campos_evento[campo].disabled = True
+
+        self._page.update()
 
     def cancelarCambiosEvento(self, e):
-        print("Cancelar evento clickeado")
+        for campo in self.nombres_campos:
+            self.campos_evento[campo].value = str(self.evento_original.get(campo, ""))
+            self.campos_evento[campo].disabled = True
+        self._page.update()
 
     def solicitarAccionRevision(self, acciones):
-        self._dropdownAccionRevision = ft.Dropdown(
-            label="Acción de revisión",
-            options=[
-                ft.dropdown.Option(acciones[0]),
-                ft.dropdown.Option(acciones[1]),
-                ft.dropdown.Option(acciones[2])
-            ],
-            width=300
-        )
-        self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento))
-        self._page.add(self._btnRegistrarAccion)
+        self.barra_acciones.visible = True
         self._page.update()
 
     def tomarSeleccionRevision(self, campos_evento):
