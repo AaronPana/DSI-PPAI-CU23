@@ -72,25 +72,24 @@ class GestorRegistrarRevision:
             )
         )
 
-    def seleccionEventoSismico(self, index) -> None:
+    def seleccionEventoSismico(self, eventoDict: dict[str, str]) -> None:
         # Este proceso de busqueda esta implementado de tal forma que se respete que
         # el boundary no conozca objetos "entity" y a su vez que el gestor si maneje estos objetos
-        # for evento in self._eventosSismicosNoRevisados:
-        #     if (
-        #         evento.fechaHoraOcurrencia == eventoSismico.fechaHoraOcurrencia
-        #         and evento.latitudEpicentro == eventoSismico.latitudEpicentro
-        #         and evento.longitudEpicentro == eventoSismico.longitudEpicentro
-        #         and evento.latitudHipocentro == eventoSismico.latitudHipocentro
-        #         and evento.longitudHipocentro == eventoSismico.longitudHipocentro
-        #         and evento.valorMagnitud == eventoSismico.valorMagnitud
-        #     ):
-        #         self._eventoSismicoSeleccionado = evento
-        eventoSismico = self._eventosSismicosNoRevisados[index]
+        for evento in self._eventosSismicosNoRevisados:
+            if (
+                str(evento.latitudEpicentro) == eventoDict["latitudEpicentro"]
+                and str(evento.longitudEpicentro) == eventoDict["longitudEpicentro"]
+                and str(evento.latitudHipocentro) == eventoDict["latitudHipocentro"]
+                and str(evento.longitudHipocentro) == eventoDict["longitudHipocentro"]
+                and str(evento.valorMagnitud) == eventoDict["valorMagnitud"]
+            ):
+                self._eventoSismicoSeleccionado = evento
         self.revisarEventoSismico()
         self.buscarDetalleEventoSismico()
         self.generarSismograma()
-        # TODO
-        self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._eventoSismicoSeleccionado.getDatos())
+
+        self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self.buscarDetalleEventoSismico())
+        print("PASO_________________________-")
         self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
         self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa()
         self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()

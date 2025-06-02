@@ -105,6 +105,9 @@ class EventoSismico:
             "latitudHipocentro": str(self.latitudHipocentro),
             "longitudHipocentro": str(self.longitudHipocentro),
             "valorMagnitud": str(self.valorMagnitud),
+            "clasificacion": str(self.clasificacionSisimo),
+            "origenDeGeneracion": str(self.origenDeGeneracion),
+            "alcanceSismico": str(self.alcanceSismo)
         }
         return infoBasicaEventoSismico
 

@@ -180,14 +180,11 @@ class BoundaryRegistrarRevision:
         if selected:
             for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
                 row.selected = (i == index)
-            evento = self._eventosSismicosNoRevisados[index]
-            eventoSeleccionado = self._gestorRegistrarRevision.seleccionEventoSismico(index)
-            self.mostrarDatosEventoSismico(eventoSeleccionado)
+            evento_dict = self._eventosSismicosNoRevisados[index]
+            self._gestorRegistrarRevision.seleccionEventoSismico(evento_dict)
             self._page.update()
     
     def mostrarDatosEventoSismico(self, evento):
-        print(3)
-        print(evento)
         evento_formateado = {
             "Fecha": evento["fechaHoraOcurrencia"].split(" ")[0],
             "Hora": evento["fechaHoraOcurrencia"].split(" ")[1],

@@ -7,6 +7,10 @@ from entities.ModeloSismografo import ModeloSismografo
 from entities.Reparacion import Reparacion
 from entities.SerieTemporal import SerieTemporal
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from entities.SerieTemporal import SerieTemporal
+
 class Sismografo:
 
     def __init__(
@@ -27,7 +31,7 @@ class Sismografo:
         # No implementamos un metodo para asociar reparaciones ya que no se requiere para el CU23
         self._reparaciones: list[Reparacion] = []
         # Como debería implementarse la lógica de asociación ??
-        self._seriesTemporales: list[SerieTemporal] = []
+        self._seriesTemporales: list["SerieTemporal"] = []
         # No deberia recibir los cambios de estado sino irlos creando y asignando los estados
         self._cambiosEstado: list[CambioEstado] = []
         # Primer cambio de estado
@@ -92,11 +96,11 @@ class Sismografo:
         self._reparaciones = nuevaReparaciones
     
     @property
-    def seriesTemporales(self) -> list[SerieTemporal]:
+    def seriesTemporales(self) -> list["SerieTemporal"]:
         return self._seriesTemporales
     
     @seriesTemporales.setter
-    def seriesTemporales(self, nuevaSeriesTemporales: list[SerieTemporal]) -> None:
+    def seriesTemporales(self, nuevaSeriesTemporales: list["SerieTemporal"]) -> None:
         self._seriesTemporales = nuevaSeriesTemporales
     
     @property
