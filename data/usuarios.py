@@ -1,6 +1,6 @@
 from entities.Suscripcion import Suscripcion
 from entities.Usuario import Usuario
-from empleados import empleado_data
+from data.empleados import empleado_data
 
 usuario0 = Usuario(
     contraseña="1234",

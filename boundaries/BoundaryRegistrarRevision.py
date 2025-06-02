@@ -1,12 +1,18 @@
 import flet as ft
+from datetime import datetime
 
 class BoundaryRegistrarRevision:
 
     def __init__(self, page: ft.Page) -> None:
+        from controls.GestorRegistrarRevision import GestorRegistrarRevision
+        self._gestorRegistrarRevision: GestorRegistrarRevision = (
+            GestorRegistrarRevision(self, datetime.now())
+        )
+        self._eventosSismicosNoRevisados = []
+        self._eventosDerivados = []
+        
         self._page: ft.Page = page
-        #self._gestorRegistrarRevision: GestorRegistrarRevision = (
-        #    GestorRegistrarRevision(self, datetime.now())
-        #)
+       
         self._grillaEventosSismicosNoRevisados: ft.DataTable = ft.DataTable(
             columns=[
                 ft.DataColumn(label=ft.Text("Fecha y Hora de Ocurrencia")),
@@ -14,10 +20,7 @@ class BoundaryRegistrarRevision:
                 ft.DataColumn(label=ft.Text("Longitud Epicentro")),
                 ft.DataColumn(label=ft.Text("Latitud Hipocentro")),
                 ft.DataColumn(label=ft.Text("Longitud Hipocentro")),
-                ft.DataColumn(label=ft.Text("Magnitud")),
-                ft.DataColumn(label=ft.Text("Clasificación")),
-                ft.DataColumn(label=ft.Text("Origen Generación")),
-                ft.DataColumn(label=ft.Text("Alcance")),
+                ft.DataColumn(label=ft.Text("Magnitud"))
             ],
             rows=[],
             heading_row_color=ft.Colors.BLUE_800
@@ -28,57 +31,7 @@ class BoundaryRegistrarRevision:
         self._btnVisualizarMapa = None
         self._btnModificarDatosEventoSismico = None
         self._campoAccionRevision = None
-        # Simulacion de datos
-        self._eventosSismicosNoRevisados = [
-            {
-                "fechaHoraOcurrencia": "2025-05-28 14:30:00",
-                "latitudEpicentro": "-31.4201",
-                "longitudEpicentro": "-64.1888",
-                "latitudHipocentro": "-31.4190",
-                "longitudHipocentro": "-64.1895",
-                "valorMagnitud": "5.6",
-                "clasificacion": "Intermedio",
-                "origenDeGeneracion": "Sismo interplaca",
-                "alcanceSismico": "Regional"
-            },
-            {
-                "fechaHoraOcurrencia": "2025-05-27 03:45:12",
-                "latitudEpicentro": "-32.0123",
-                "longitudEpicentro": "-63.1234",
-                "latitudHipocentro": "-32.0101",
-                "longitudHipocentro": "-63.1256",
-                "valorMagnitud": "3.9",
-                "clasificacion": "Superficial",
-                "origenDeGeneracion": "Sismo volcánico",
-                "alcanceSismico": "Local"
-            }
-        ]
-
-        self._eventosDerivados = [
-            {
-                "fechaHoraOcurrencia": "2025-05-30 09:12:45",
-                "latitudEpicentro": "-30.9472",
-                "longitudEpicentro": "-66.1234",
-                "latitudHipocentro": "-30.9450",
-                "longitudHipocentro": "-66.1201",
-                "valorMagnitud": "4.8",
-                "clasificacion": "Intermedio",
-                "origenDeGeneracion": "Sismo cortical",
-                "alcanceSismico": "Regional"
-            },
-            {
-                "fechaHoraOcurrencia": "2025-05-29 22:01:10",
-                "latitudEpicentro": "-33.1230",
-                "longitudEpicentro": "-65.7890",
-                "latitudHipocentro": "-33.1211",
-                "longitudHipocentro": "-65.7902",
-                "valorMagnitud": "6.2",
-                "clasificacion": "Profundo",
-                "origenDeGeneracion": "Sismo de subducción",
-                "alcanceSismico": "Internacional"
-            }
-        ]
-
+        
         #seccion: detalle de evento sismico
         self.campos_evento = {}
         self.formulario_edicion = ft.Column(visible=False)
@@ -86,7 +39,7 @@ class BoundaryRegistrarRevision:
 
         self.nombres_campos = [
             "Fecha", "Hora", "Latitud", "Longitud",
-            "Profundidad", "Magnitud", "Alcance", "Estado"
+            "Profundidad", "Magnitud"
         ]
 
         for campo in self.nombres_campos:
@@ -95,7 +48,6 @@ class BoundaryRegistrarRevision:
                 disabled=True,
                 expand=True
             )
-        
         
         self.imagen_mapa = ft.Image(
             key="mapaSismograma",
@@ -139,6 +91,7 @@ class BoundaryRegistrarRevision:
         boton_guardar = ft.ElevatedButton("Guardar cambios", on_click=self.guardarCambiosEvento)
         boton_cancelar = ft.ElevatedButton("Cancelar cambios", on_click=self.cancelarCambiosEvento)
         boton_ver_mapa = ft.ElevatedButton("Ver mapa", on_click=self.mostrarSismograma)
+        boton_ver_sismograma = ft.ElevatedButton("Ver Sismograma", on_click=self.mostrarSismograma)
 
         # Sección detalle evento
         self.formulario_edicion = ft.Column([
@@ -185,10 +138,7 @@ class BoundaryRegistrarRevision:
                 ft.DataColumn(label=ft.Text("Longitud Epicentro")),
                 ft.DataColumn(label=ft.Text("Latitud Hipocentro")),
                 ft.DataColumn(label=ft.Text("Longitud Hipocentro")),
-                ft.DataColumn(label=ft.Text("Magnitud")),
-                ft.DataColumn(label=ft.Text("Clasificación")),
-                ft.DataColumn(label=ft.Text("Origen Generación")),
-                ft.DataColumn(label=ft.Text("Alcance")),
+                ft.DataColumn(label=ft.Text("Magnitud"))
             ],
         rows=[],
         heading_row_color=ft.Colors.BLUE_100
@@ -201,8 +151,11 @@ class BoundaryRegistrarRevision:
             ], visible=True)
 
     
-    #Ventana
-    def registrarRevisionManual(self):
+    # ---------------------- CHECK ------------------------------------
+    def registrarRevisionManual(self, evento):
+        self.habilitarVentana(evento)
+
+    def habilitarVentana(self, evento):
         self._page.theme_mode = ft.ThemeMode.LIGHT
         self._page.title = "Red Sísmica"
         self._page.scroll = ft.ScrollMode.AUTO
@@ -210,17 +163,61 @@ class BoundaryRegistrarRevision:
         self._page.window.height = 760
         self._page.window.resizable = False
 
-        self.cargarEventosSismicos(self._eventosSismicosNoRevisados)
-        self.cargarEventosDerivados()
-
+        self._gestorRegistrarRevision.seleccionDatosEventosSismicos()
+        
         self._page.add(
             self._grillaEventosSismicosNoRevisados,
             self.formulario_edicion,
             self.formulario_revision_final  
-            )
+        )
 
-    def habilitarVentana(self):
+    def mostrarDatosEventosSismicos(self, datos_eventos):
+        self._eventosSismicosNoRevisados = datos_eventos
+        self.cargarEventosSismicos(datos_eventos)
+        self._page.update()
+
+    def seleccionEventoSismico(self, index, selected):
+        if selected:
+            for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
+                row.selected = (i == index)
+            evento = self._eventosSismicosNoRevisados[index]
+            eventoSeleccionado = self._gestorRegistrarRevision.seleccionEventoSismico(index)
+            self.mostrarDatosEventoSismico(eventoSeleccionado)
+            self._page.update()
+    
+    def mostrarDatosEventoSismico(self, evento):
+        print(3)
+        print(evento)
+        evento_formateado = {
+            "Fecha": evento["fechaHoraOcurrencia"].split(" ")[0],
+            "Hora": evento["fechaHoraOcurrencia"].split(" ")[1],
+            "Latitud": evento["latitudEpicentro"],
+            "Longitud": evento["longitudEpicentro"],
+            "Profundidad": evento.get("latitudHipocentro", ""), 
+            "Magnitud": evento["valorMagnitud"]
+        }
+        for campo in self.nombres_campos:
+            self.campos_evento[campo].value = str(evento_formateado.get(campo, ""))
+            self.campos_evento[campo].disabled = True
+
+        self.habilitarOpcionVisualizarMapa(True)
+        self.formulario_edicion.visible = True
+        self._page.update()
+    
+    def mostrarSismograma(self, imagen_path):
+        self.imagen_mapa.src = imagen_path
+        self.contenedor_mapa.visible = True
+        self.imagen_mapa.visible = True
+        self._page.update()
+
+    def habilitarOpcionVisualizarMapa(self, bool):
+        self.contenedor_mapa.visible = bool
+        self.imagen_mapa.visible = bool
+    
+    def habilitarModificarDatosEventoSismico(self): #no van?
         pass
+
+    # ------------------------------ CHEQUEANDO ---------------------------------------------------
 
     # cambiar datos de celdas por "objeto.atributo"
     def cargarEventosSismicos(self, eventos):
@@ -233,58 +230,18 @@ class BoundaryRegistrarRevision:
                     ft.DataCell(ft.Text(str(evento["longitudEpicentro"]))),
                     ft.DataCell(ft.Text(str(evento["latitudHipocentro"]))),
                     ft.DataCell(ft.Text(str(evento["longitudHipocentro"]))),
-                    ft.DataCell(ft.Text(str(evento["valorMagnitud"]))),
-                    ft.DataCell(ft.Text(str(evento["clasificacion"]))),
-                    ft.DataCell(ft.Text(str(evento["origenDeGeneracion"]))),
-                    ft.DataCell(ft.Text(str(evento["alcanceSismico"]))),
+                    ft.DataCell(ft.Text(str(evento["valorMagnitud"])))
                 ],
                 selected=False,
-                on_select_changed=lambda selected, i=index: self._onSelectRow(i, selected)
+                on_select_changed=lambda selected, i=index: self.seleccionEventoSismico(i, selected)
             )
             filas.append(fila)
 
         self._grillaEventosSismicosNoRevisados.rows = filas
     
-    def _onSelectRow(self, index, selected):    
-            if selected:
-                for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
-
-                    row.selected = (i == index)
-
-                evento = self._eventosSismicosNoRevisados[index]
-
-        # Mapea las claves del diccionario a los nombres esperados por el formulario
-            evento_formateado = {
-                "Fecha": evento["fechaHoraOcurrencia"].split(" ")[0],
-                "Hora": evento["fechaHoraOcurrencia"].split(" ")[1],
-                "Latitud": evento["latitudEpicentro"],
-                "Longitud": evento["longitudEpicentro"],
-                "Profundidad": evento.get("latitudHipocentro", ""), 
-                "Magnitud": evento["valorMagnitud"],
-                "Alcance": evento["alcanceSismico"],
-                "Estado": evento["clasificacion"]
-            }
-
-            self.eventoSeleccionado(evento_formateado)
-            self._page.update()
 
 
     # metodos detalle evento
-
-    def eventoSeleccionado(self, evento_dict):
-        self.evento_original = evento_dict.copy()
-
-        for campo in self.nombres_campos:
-            self.campos_evento[campo].value = str(evento_dict.get(campo, ""))
-
-            # reiniciar estado de los campos (deshabilitar todos)
-            self.campos_evento[campo].disabled = True
-        
-        self.contenedor_mapa.visible = False
-        self.imagen_mapa.visible = False
-
-        self.formulario_edicion.visible = True
-        self._page.update()
     
     def modificarEvento(self, e):
         for campo in self.nombres_campos:
@@ -320,10 +277,7 @@ class BoundaryRegistrarRevision:
                     ft.DataCell(ft.Text(str(evento["longitudEpicentro"]))),
                     ft.DataCell(ft.Text(str(evento["latitudHipocentro"]))),
                     ft.DataCell(ft.Text(str(evento["longitudHipocentro"]))),
-                    ft.DataCell(ft.Text(str(evento["valorMagnitud"]))),
-                    ft.DataCell(ft.Text(str(evento["clasificacion"]))),
-                    ft.DataCell(ft.Text(str(evento["origenDeGeneracion"]))),
-                    ft.DataCell(ft.Text(str(evento["alcanceSismico"]))),
+                    ft.DataCell(ft.Text(str(evento["valorMagnitud"])))
                 ],
             )
             filas.append(fila)
@@ -331,38 +285,23 @@ class BoundaryRegistrarRevision:
 
     def tomarSeleccionRevision(self, e):
         accion = self._dropdownAccionRevision.value
-        if accion == "Aceptar Evento":
-            print("Evento aceptado.")
-        elif accion == "Rechazar Evento":
-            print("Evento rechazado.")
-        else:
-            print("Evento derivado a experto.")
+        datos_evento = [campo.value for campo in self.campos_evento.values()]
+        
+        accion_mapeada = {
+            "Aceptar Evento": "CONFIRMAR",
+            "Rechazar Evento": "RECHAZAR",
+            "Derivar a experto": "SOLICITAR REVISION"
+        }.get(accion, "")
+        
+        if accion_mapeada:
+            self._gestorRegistrarRevision.tomarSeleccionRevision(accion_mapeada, datos_evento)
     
 
     # metodos
-    def mostrarDatosEventosSismicos(self):
-        pass
 
-    def seleccionEventoSismico(self):
-        pass
     
-    def mostrarDatosEventoSismico(self):
-        pass
-
-    def mostrarSismograma(self, e):
-        self.contenedor_mapa.visible = True
-        self.imagen_mapa.visible = True
-        
-        self._page.update()
-
-    def habilitarOpcionVisualizarMapa(self):#no van ?
-        pass
-
-    def habilitarBtnMapa(self):# no van?
-        pass
-
-    def habilitarModificarDatosEventoSismico(self): #no van?
-        pass
+    def mostrarDatosEventoSismico(self, datos_evento):
+        self.eventoSeleccionado(datos_evento)
 
     def solicitarAccionRevision(self):
         pass

@@ -52,7 +52,7 @@ class GestorRegistrarRevision:
         self.obtenerEventosSismicosNoRevisados()
         self.ordenarPorFechaHoraOcurrencia()
         # TODO
-        # self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(self._datosEventosSismicosNoRevisados)
+        self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(self._datosEventosSismicosNoRevisados)
 
     def obtenerEventosSismicosNoRevisados(self) -> None:
         for evento in self._eventos:
@@ -72,29 +72,29 @@ class GestorRegistrarRevision:
             )
         )
 
-    def seleccionEventoSismico(self, eventoDict: dict[str, str]) -> None:
+    def seleccionEventoSismico(self, index) -> None:
         # Este proceso de busqueda esta implementado de tal forma que se respete que
         # el boundary no conozca objetos "entity" y a su vez que el gestor si maneje estos objetos
-        for evento in self._eventosSismicosNoRevisados:
-            if (
-                evento.fechaHoraOcurrencia == eventoDict["fechaHoraOcurrencia"]
-                and evento.latitudEpicentro == eventoDict["latitudEpicentro"]
-                and evento.longitudEpicentro == eventoDict["longitudEpicentro"]
-                and evento.latitudHipocentro == eventoDict["latitudHipocentro"]
-                and evento.longitudHipocentro == eventoDict["longitudHipocentro"]
-                and evento.valorMagnitud == eventoDict["valorMagnitud"]
-            ):
-                self._eventoSismicoSeleccionado = evento
-
+        # for evento in self._eventosSismicosNoRevisados:
+        #     if (
+        #         evento.fechaHoraOcurrencia == eventoSismico.fechaHoraOcurrencia
+        #         and evento.latitudEpicentro == eventoSismico.latitudEpicentro
+        #         and evento.longitudEpicentro == eventoSismico.longitudEpicentro
+        #         and evento.latitudHipocentro == eventoSismico.latitudHipocentro
+        #         and evento.longitudHipocentro == eventoSismico.longitudHipocentro
+        #         and evento.valorMagnitud == eventoSismico.valorMagnitud
+        #     ):
+        #         self._eventoSismicoSeleccionado = evento
+        eventoSismico = self._eventosSismicosNoRevisados[index]
         self.revisarEventoSismico()
         self.buscarDetalleEventoSismico()
         self.generarSismograma()
         # TODO
-        # self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._eventoSismicoSeleccionado.getDatos())
-        # self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
-        # self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa()
-        # self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()
-        # self._boundaryRegistrarRevision.solicitarAccionRevision(self._accionesRevision)
+        self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._eventoSismicoSeleccionado.getDatos())
+        self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
+        self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa()
+        self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico()
+        self._boundaryRegistrarRevision.solicitarAccionRevision(self._accionesRevision)
 
     def revisarEventoSismico(self) -> None:
         nuevoEstado: Estado = [
