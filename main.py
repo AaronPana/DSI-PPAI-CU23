@@ -5,11 +5,12 @@ from boundaries.BoundaryRegistrarRevision import BoundaryRegistrarRevision
 
 class Main:
 
-    _boundaryRegistrarRevision: BoundaryRegistrarRevision = BoundaryRegistrarRevision()
+    def __init__(self):
+        ft.app(target=Main.registrarRevisionManual)
 
     @staticmethod
     def registrarRevisionManual(page):
-        pass
+        boundaryRegistrarRevision: BoundaryRegistrarRevision = BoundaryRegistrarRevision(page)
+        boundaryRegistrarRevision.registrarRevisionManual()
 
-
-ft.app(target=Main.registrarRevisionManual)
+Main()
