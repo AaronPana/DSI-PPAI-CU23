@@ -16,9 +16,3 @@ AlcanceSismo2 = AlcanceSismo(
 )
 
 alcanceSismo_data = [AlcanceSismo0, AlcanceSismo1, AlcanceSismo2]
-
-# nombre: Este atributo representa el nombre de la clasificación del alcance del sismo. Ejemplos proporcionados incluyen
-# "sismos locales", "sismos regionales" o "tele sismos".
-# descripcion: Este atributo proporciona una descripción o detalle de la clasificación. Para el alcance, la
-# descripción detalla la distancia epicentral que define la categoría (por ejemplo, "hasta 100 km" para sismos
-# locales, "hasta 1000 km" para sismos regionales, o "más de 1000 km" para tele sismos).

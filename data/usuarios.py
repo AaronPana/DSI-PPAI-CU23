@@ -8,12 +8,14 @@ usuario0 = Usuario(
     empleado=empleado_data[0],
     suscripcion=Suscripcion(),
 )
+
 usuario1 = Usuario(
     contraseña="1234",
     nombreUsuario="Marcelo",
     empleado=empleado_data[1],
     suscripcion=Suscripcion(),
 )
+
 usuario2 = Usuario(
     contraseña="1234",
     nombreUsuario="Federica",

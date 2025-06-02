@@ -21,7 +21,6 @@ EstacionSismologica1 = EstacionSismologica(
     nroCertificacionAdquisicion=3563,
 )
 
-
 EstacionSismologica2 = EstacionSismologica(
     codigoEstacion="003",
     documentoCertificacionAdq="certificacionAdquisicion2012.pdf",
