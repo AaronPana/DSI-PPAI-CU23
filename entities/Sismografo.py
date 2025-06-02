@@ -7,7 +7,6 @@ from entities.ModeloSismografo import ModeloSismografo
 from entities.Reparacion import Reparacion
 from entities.SerieTemporal import SerieTemporal
 
-
 class Sismografo:
 
     def __init__(
@@ -57,3 +56,53 @@ class Sismografo:
     # ya que no se requiere para el CU23
     # def crearCambioEstado(self, nuevoEstado: Estado) -> None:
     #     pass
+
+    #Métodos de acceso (getters y setters)
+
+    @property
+    def fechaAdquisicion(self) -> date:
+        return self._fechaAdquisicion
+    
+    @fechaAdquisicion.setter
+    def fechaAdquisicion(self, nuevaFechaAdquisicion: date) -> None:
+        self._fechaAdquisicion = nuevaFechaAdquisicion
+    
+    @identificadorSismografo.setter
+    def identificadorSismografo(self, nuevoIdentificadorSismografo: str) -> None:
+        self._identificadorSismografo = nuevoIdentificadorSismografo
+    
+    @property
+    def nroSerie(self) -> int:
+        return self._nroSerie
+    
+    @nroSerie.setter
+    def nroSerie(self, nuevoNroSerie: int) -> None:
+        self._nroSerie = nuevoNroSerie
+    
+    @estadoActual.setter
+    def estadoActual(self, nuevoEstadoActual: Estado) -> None:
+        self._estadoActual = nuevoEstadoActual
+    
+    @property
+    def reparaciones(self) -> list[Reparacion]:
+        return self._reparaciones
+    
+    @reparaciones.setter
+    def reparaciones(self, nuevaReparaciones: list[Reparacion]) -> None:
+        self._reparaciones = nuevaReparaciones
+    
+    @property
+    def seriesTemporales(self) -> list[SerieTemporal]:
+        return self._seriesTemporales
+    
+    @seriesTemporales.setter
+    def seriesTemporales(self, nuevaSeriesTemporales: list[SerieTemporal]) -> None:
+        self._seriesTemporales = nuevaSeriesTemporales
+    
+    @property
+    def cambiosEstados(self) -> list[CambioEstado]:
+        return self._cambiosEstado
+    
+    @cambiosEstados.setter
+    def cambiosEstados(self, nuevoCambiosEstados: list[CambioEstado]) -> None:
+        self._cambiosEstado = nuevoCambiosEstados

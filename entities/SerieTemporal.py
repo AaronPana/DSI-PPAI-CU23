@@ -3,10 +3,8 @@ from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
 from entities.Sismografo import Sismografo
 
-
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
-
 
 class SerieTemporal:
 
@@ -27,6 +25,8 @@ class SerieTemporal:
         self._sismografo: Sismografo = sismografo
         self._muestrasSismicas: list[MuestraSismica] = []
 
+    #Metodos utilizados en el CU23
+
     def getDatos(self) -> InfoSerieTemporal:
         """
         rtype: InfoSerieTemporal
@@ -45,3 +45,61 @@ class SerieTemporal:
         }
 
         return infoSerieTemporal
+
+    #Métodos de acceso (getters y setters)
+
+    @property
+    def condicionAlarma(self) -> bool:
+        return self._condicionAlarma
+    
+    @condicionAlarma.setter
+    def condicionAlarma(self, nuevaCondicionAlarma: bool) -> None:
+        self._condicionAlarma = nuevaCondicionAlarma
+    
+    @property
+    def fechaHoraInicioRegistroMuestra(self) -> datetime:
+        return 
+    
+    @fechaHoraInicioRegistroMuestra.setter
+    def fechaHoraInicioRegistroMuestra(self, nuevaFechaHoraInicioRegistroMuestra: datetime) -> None:
+        self._fechaHoraInicioRegistroMuestra = nuevaFechaHoraInicioRegistroMuestra
+    
+    @property
+    def fechaHoraRegistro(self) -> datetime:
+        return self._fechaHoraRegistro
+
+    @fechaHoraRegistro.setter
+    def fechaHoraRegistro(self, nuevaFechaHoraRegistro: datetime) -> None:
+        self._fechaHoraRegistro = nuevaFechaHoraRegistro
+    
+    @property
+    def frecuenciaMuestreo(self) -> int:
+        return self._frecuenciaMuestreo
+    
+    @frecuenciaMuestreo.setter
+    def frecuenciaMuestreo(self, nuevaFrecuenciaMuestreo: int) -> None:
+        self._frecuenciaMuestreo = nuevaFrecuenciaMuestreo
+    
+    @property
+    def estado(self) -> Estado:
+        return self._estado
+    
+    @estado.setter
+    def estado(self, nuevoEstado: Estado) -> None:
+        self._estado = nuevoEstado
+    
+    @property
+    def sismografo(self) -> Sismografo:
+        return self._sismografo
+    
+    @sismografo.setter
+    def sismografo(self, nuevoSismografo: Sismografo) -> None:
+        self._sismografo = nuevoSismografo
+    
+    @property
+    def muestrasSismicas(self) -> list[MuestraSismica]:
+        return self._muestrasSismicas
+    
+    @muestrasSismicas.setter
+    def muestrasSismicas(self, nuevaMuestrasSismicas: list[MuestraSismica]) -> None:
+        self._muestrasSismicas = nuevaMuestrasSismicas
