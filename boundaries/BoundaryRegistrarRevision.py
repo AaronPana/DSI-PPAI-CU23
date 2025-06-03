@@ -19,7 +19,7 @@ class BoundaryRegistrarRevision:
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico", on_click=lambda e: self.guardarCambiosEvento)
         self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion", on_click=lambda e: self.cancelarCambiosEvento)
-        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelarCasoUso)
+        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar)
         self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa)
         self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento))
 
@@ -413,6 +413,9 @@ class BoundaryRegistrarRevision:
                     ],
                 )
                 self._page.open(dlg)
+    
+    def cancelar():
+        pass
 
     def finCasoUso(self, e):
         pass
