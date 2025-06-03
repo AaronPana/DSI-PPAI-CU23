@@ -7,7 +7,7 @@ class TipoDeDato:
         self._nombreUnidadMedida: str = nombreUnidadMedida
         self._valorUmbral: tuple[int, int] = valorUmbral
 
-    #Metodos utilizados en el CU23
+    # Metodos utilizados en el CU23
 
     @property
     def denominacion(self) -> str:
@@ -26,29 +26,21 @@ class TipoDeDato:
             "denominacion": self._denominacion,
             "nombreUnidadMedida": self._nombreUnidadMedida,
         }
-    
-    #Métodos de acceso (getters y setters)
 
-    @property
-    def denominacion(self) -> str:
-        return self._denominacion
-    
+    # Métodos de acceso (getters y setters)
+
     @denominacion.setter
     def denominacion(self, nuevaDenominacion: str) -> None:
         self._denominacion = nuevaDenominacion
 
-    @property
-    def nombreUnidadMedida(self) -> str:
-        return self._nombreUnidadMedida
-    
     @nombreUnidadMedida.setter
     def nombreUnidadMedida(self, nuevoNombreUnidadMedida: str) -> None:
         self._nombreUnidadMedida = nuevoNombreUnidadMedida
-    
+
     @property
     def valorUmbral(self) -> tuple[int, int]:
         return self._valorUmbral
-    
+
     @valorUmbral.setter
     def valorUmbral(self, nuevoValorUmbral: tuple[int, int]) -> None:
         self._valorUmbral = nuevoValorUmbral
