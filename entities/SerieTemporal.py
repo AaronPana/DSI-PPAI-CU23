@@ -1,7 +1,10 @@
 from datetime import datetime
 from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
-from entities.Sismografo import Sismografo
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from entities.Sismografo import Sismografo
 
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
@@ -16,14 +19,14 @@ class SerieTemporal:
         fechaHoraRegistro: datetime,
         frecuenciaMuestreo: int,
         estado: Estado,
-        sismografo: Sismografo,
+        sismografo: "Sismografo",
     ) -> None:
         self._condicionAlarma: bool = condicionAlarma
         self._fechaHoraInicioRegistroMuestra: datetime = fechaHoraInicioRegistroMuestras
         self._fechaHoraRegistro: datetime = fechaHoraRegistro
         self._frecuenciaMuestreo: int = frecuenciaMuestreo
         self._estado: Estado = estado
-        self._sismografo: Sismografo = sismografo
+        self._sismografo: "Sismografo" = sismografo
         self._muestrasSismicas: list[MuestraSismica] = []
 
     # Metodos utilizados en el CU23
@@ -92,11 +95,11 @@ class SerieTemporal:
         self._estado = nuevoEstado
 
     @property
-    def sismografo(self) -> Sismografo:
+    def sismografo(self) -> "Sismografo":
         return self._sismografo
 
     @sismografo.setter
-    def sismografo(self, nuevoSismografo: Sismografo) -> None:
+    def sismografo(self, nuevoSismografo: "Sismografo") -> None:
         self._sismografo = nuevoSismografo
 
     @property
