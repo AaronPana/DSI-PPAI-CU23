@@ -5,10 +5,7 @@ from datetime import datetime
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controls.GestorRegistrarRevision import GestorRegistrarRevision
-
-        self._gestorRegistrarRevision: GestorRegistrarRevision = (
-            GestorRegistrarRevision(self, datetime.now())
-        )
+        self._gestorRegistrarRevision: GestorRegistrarRevision = (GestorRegistrarRevision(self, datetime.now()))
         self._page: ft.Page = page
 
         # ATRIBUTOS
@@ -21,19 +18,10 @@ class BoundaryRegistrarRevision:
 
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico", on_click=lambda e: self.guardarCambiosEvento)
-        self._btnCancelar = ft.ElevatedButton(
-            "Cancelar Modificacion", on_click=lambda e: self.cancelarCambiosEvento
-        )
-        self._btnCancelarCU = ft.ElevatedButton(
-            "Cancelar", on_click=lambda e: self.cancelarCasoUso
-        )
-        self._btnVisualizarMapa = ft.ElevatedButton(
-            "Ver mapa", on_click=lambda e: self.mostrarMapa
-        )
-        self._btnRegistrarAccion = ft.ElevatedButton(
-            text="Registrar",
-            on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento),
-        )
+        self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion", on_click=lambda e: self.cancelarCambiosEvento)
+        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelarCasoUso)
+        self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa)
+        self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento))
 
         self._dropdownAccionRevision = ft.Dropdown(
             label="Acción de revisión",
@@ -48,17 +36,13 @@ class BoundaryRegistrarRevision:
         self.imagen_sismograma = ft.Image(
             key="mapaSismograma",
             src="../data/sismograma.png",
-            visible=False,
-            width=400,
-            height=250,
-            fit=ft.ImageFit.CONTAIN,
-        )
+            visible=False, width=400, height=250, fit=ft.ImageFit.CONTAIN)
 
         self.contenedor_sismograma = ft.Container(
             content=ft.Column(
                 [
                     ft.Text(
-                        "Mapa Sísmico",
+                        "Sismograma",
                         size=16,
                         weight="bold",
                         color=ft.Colors.BLUE_800,
@@ -179,7 +163,7 @@ class BoundaryRegistrarRevision:
     def registrarRevisionManual(self, evento):
         self.habilitarVentana(evento)
 
-    def habilitarVentana(self, evento):
+    def habilitarVentana(self, e):
         self._page.theme_mode = ft.ThemeMode.LIGHT
         self._page.title = "Red Sísmica"
         self._page.scroll = ft.ScrollMode.AUTO
@@ -402,11 +386,11 @@ class BoundaryRegistrarRevision:
         self.barra_edicion.visible = False
         self._page.update()
 
-    def solicitarAccionRevision(self, acciones):
+    def solicitarAccionRevision(self):
         self.barra_acciones.visible = True
         self._page.update()
 
-    def tomarSeleccionRevision(self, campos_evento):
+    def tomarSeleccionRevision(self):
         accion = self._dropdownAccionRevision.value
         datos_evento = [campo.value for campo in self.campos_evento.values()]
         accion_mapeada = {
@@ -430,5 +414,5 @@ class BoundaryRegistrarRevision:
                 )
                 self._page.open(dlg)
 
-    def cancelarCasoUso(self, e):
-        print("Cancelar evento clickeado")
+    def finCasoUso(self, e):
+        pass
