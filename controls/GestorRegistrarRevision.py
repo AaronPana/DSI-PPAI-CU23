@@ -51,7 +51,9 @@ class GestorRegistrarRevision:
     def seleccionDatosEventosSismicos(self) -> None:
         self.obtenerEventosSismicosNoRevisados()
         self.ordenarPorFechaHoraOcurrencia()
-        self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(self._datosEventosSismicosNoRevisados)
+        self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(
+            self._datosEventosSismicosNoRevisados
+        )
 
     def obtenerEventosSismicosNoRevisados(self) -> None:
         for evento in self._eventos:
@@ -87,7 +89,9 @@ class GestorRegistrarRevision:
         self.buscarDetalleEventoSismico()
         self.generarSismograma()
 
-        self._boundaryRegistrarRevision.mostrarDatosEventoSismico(self._datosEventoSismico)
+        self._boundaryRegistrarRevision.mostrarDatosEventoSismico(
+            self._datosEventoSismico
+        )
         self._boundaryRegistrarRevision.mostrarSismograma(self._sismograma)
         self._boundaryRegistrarRevision.habilitarOpcionVisualizarMapa(True)
         self._boundaryRegistrarRevision.habilitarModificarDatosEventoSismico(True)
@@ -125,8 +129,10 @@ class GestorRegistrarRevision:
             self._eventoSismicoSeleccionado is not None
             and self._responsable is not None
         ):
-            respuesta = self._eventoSismicoSeleccionado.rechazar(nuevoEstado, self._responsable, fechaHoraActual)
-        if respuesta: 
+            respuesta = self._eventoSismicoSeleccionado.rechazar(
+                nuevoEstado, self._responsable, fechaHoraActual
+            )
+        if respuesta:
             return True
         else:
             return False
@@ -137,7 +143,7 @@ class GestorRegistrarRevision:
     def getFechaHora(self) -> datetime:
         return datetime.now()
 
-    def buscarDetalleEventoSismico(self) -> dict:
+    def buscarDetalleEventoSismico(self):
         if self._eventoSismicoSeleccionado is not None:
             self._datosEventoSismico = (
                 self._eventoSismicoSeleccionado.getDatosEventoSismico()
@@ -146,15 +152,15 @@ class GestorRegistrarRevision:
     def generarSismograma(self) -> None:
         self._sismograma = "../data/sismograma.png"
 
-    def tomarSeleccionRevision(self, revision: str, datosEvento: list[str]) -> None:
+    def tomarSeleccionRevision(self, revision: str, datosEvento: list[str]) -> bool:
         self._tieneDatosValidos = self.validarDatosEventoSismico(revision, datosEvento)
         if self._tieneDatosValidos and revision == "RECHAZAR":
             respuesta = self.rechazarEventoSismico()
-            if respuesta: 
+            if respuesta:
                 return True
-            else: 
+            else:
                 return False
-        else: 
+        else:
             return False
         # Si se quisiera seguir con el flujo, registrando otra accion en otro evento...
         # self.seleccionDatosEventosSismicos()

@@ -3,6 +3,7 @@ from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from entities.Sismografo import Sismografo
 
