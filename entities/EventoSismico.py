@@ -13,6 +13,7 @@ InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
+
 class EventoSismico:
 
     def __init__(
@@ -47,7 +48,7 @@ class EventoSismico:
         self._seriesTemporales: list[SerieTemporal] = []
         self._cambiosEstado: list[CambioEstado] = []
 
-    #Metodos utilizados en el CU23
+    # Metodos utilizados en el CU23
 
     @property
     def origenDeGeneracion(self) -> str:
@@ -153,16 +154,24 @@ class EventoSismico:
     ) -> None:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        if respuesta:
+            return True
+        else:
+            return False
 
     # La implementacion de revisar() y rechazar() es exactamente la misma debido a que
     # se busca diferenciar los eventos tal cual esta en el diagrama de maquina de estados
     def rechazar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
-    ) -> None:
+    ) -> bool:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        if respuesta:
+            return True
+        else:
+            return False
 
     def buscarCambioEstado(self) -> CambioEstado:
         cambioEstadoActual: CambioEstado = [
@@ -177,13 +186,14 @@ class EventoSismico:
             nuevoEstado, responsable, fechaHoraInicio
         )
         self._cambiosEstado.append(nuevoCambioEstado)
+        return nuevoCambioEstado
 
-    #Métodos de acceso (getters y setters)
+    # Métodos de acceso (getters y setters)
 
     @property
     def fechaHoraFin(self) -> datetime:
         return self._fechaHoraFin
-    
+
     @fechaHoraFin.setter
     def fechaHoraFin(self, nuevaFechaHoraFin: datetime) -> None:
         self._fechaHoraFin = nuevaFechaHoraFin
@@ -191,7 +201,7 @@ class EventoSismico:
     @fechaHoraOcurrencia.setter
     def fechaHoraOcurrencia(self, nuevaFechaHoraOcurrencia: datetime) -> None:
         self._fechaHoraOcurrencia = nuevaFechaHoraOcurrencia
-    
+
     @latitudEpicentro.setter
     def latitudEpicentro(self, nuevaLatitudEpicentro: float) -> None:
         self._latitudEpicentro = nuevaLatitudEpicentro
@@ -199,15 +209,15 @@ class EventoSismico:
     @latitudHipocentro.setter
     def latitudHipocentro(self, nuevaLatitudHipocentro: float) -> None:
         self._latitudHipocentro = nuevaLatitudHipocentro
-    
+
     @longitudEpicentro.setter
     def longitudEpicentro(self, nuevaLongitudEpicentro: float) -> None:
         self._longitudEpicentro = nuevaLongitudEpicentro
-    
+
     @longitudHipocentro.setter
     def longitudHipocentro(self, nuevaLongitudHipocentro: float) -> None:
         self._longitudHipocentro = nuevaLongitudHipocentro
-    
+
     @valorMagnitud.setter
     def valorMagnitud(self, nuevoValorMagnitud: float) -> None:
         self._valorMagnitud = nuevoValorMagnitud
@@ -215,51 +225,51 @@ class EventoSismico:
     @clasificacionSisimo.setter
     def clasificacionSisimo(self, nuevaClasificacionSismo: ClasificacionSismo) -> None:
         self._clasificacionSisimo = nuevaClasificacionSismo
-    
+
     @property
     def magnitud(self) -> MagnitudRichter:
         return self._magnitud
-    
+
     @magnitud.setter
     def magnitud(self, nuevaMagnitud: MagnitudRichter) -> None:
         self._magnitud = nuevaMagnitud
-    
+
     @origenDeGeneracion.setter
     def origenDeGeneracion(self, nuevoOrigenDeGeneracion: OrigenDeGeneracion) -> None:
         self._origenDeGeneracion = nuevoOrigenDeGeneracion
-    
+
     @alcanceSismo.setter
     def alcanceSismo(self, nuevoAlcanceSismo: AlcanceSismo) -> None:
         self._alcanceSismo = nuevoAlcanceSismo
-    
+
     @property
     def estadoActual(self) -> Estado:
         return self._estadoActual
-    
+
     @estadoActual.setter
     def estadoActual(self, nuevoEstadoActual: Estado) -> None:
         self._estadoActual = nuevoEstadoActual
-    
+
     @property
     def analistaSupervisor(self) -> Empleado:
         return self._analistaSupervisor
-    
+
     @analistaSupervisor.setter
     def analistaSupervisor(self, nuevoAnalistaSupervisor: Empleado) -> None:
         self._analistaSupervisor = nuevoAnalistaSupervisor
-    
+
     @property
     def seriesTemporales(self) -> list[SerieTemporal]:
         return self._seriesTemporales
-    
+
     @seriesTemporales.setter
     def seriesTemporales(self, nuevaSeriesTemporales: list[SerieTemporal]) -> None:
         self._seriesTemporales = nuevaSeriesTemporales
-    
+
     @property
     def cambiosEstado(self) -> list[CambioEstado]:
         return self._cambiosEstado
-    
+
     @cambiosEstado.setter
     def cambiosEstado(self, nuevoCambioEstado: list[CambioEstado]) -> None:
         self._cambiosEstado = nuevoCambioEstado

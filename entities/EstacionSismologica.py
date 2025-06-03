@@ -1,5 +1,6 @@
 from datetime import date
 
+
 class EstacionSismologica:
 
     def __init__(
@@ -20,7 +21,7 @@ class EstacionSismologica:
         self._nombre: str = nombre
         self._nroCertificacionAdquisicion: int = nroCertificacionAdquisicion
 
-    #Metodos utilizados en el CU23
+    # Metodos utilizados en el CU23
 
     @property
     def codigoEstacion(self) -> str:
@@ -30,44 +31,46 @@ class EstacionSismologica:
     def nombre(self) -> str:
         return self._nombre
 
-    #Métodos de acceso (getters y setters)
+    # Métodos de acceso (getters y setters)
 
     @codigoEstacion.setter
     def codigoEstacion(self, nuevoCodigoEstacion: str) -> None:
         self._codigoEstacion = nuevoCodigoEstacion
-    
+
     @property
     def documentoCertificacionAdq(self) -> str:
         return self._documentoCertificacionAdq
-    
+
     @documentoCertificacionAdq.setter
     def documentoCertificacionAdq(self, nuevoDocumentoCertificacionAdq: str) -> None:
         self._documentoCertificacionAdq = nuevoDocumentoCertificacionAdq
-    
+
     @property
     def fechaSolicitudCertificacion(self) -> date:
         return self._fechaSolicitudCertificacion
-    
+
     @fechaSolicitudCertificacion.setter
-    def fechaSolicitudCertificacion(self, nuevoFechaSolicitudCertificacion: date) -> None:
+    def fechaSolicitudCertificacion(
+        self, nuevoFechaSolicitudCertificacion: date
+    ) -> None:
         self._fechaSolicitudCertificacion = nuevoFechaSolicitudCertificacion
-    
+
     @property
     def latitud(self) -> float:
         return self._latitud
-    
+
     @latitud.setter
     def latitud(self, nuevaLatitud: float) -> None:
         self._latitud = nuevaLatitud
-    
+
     @property
     def longitud(self) -> float:
         return self._longitud
-    
+
     @longitud.setter
     def longitud(self, nuevaLongitud: float) -> None:
         self._longitud = nuevaLongitud
-    
+
     @nombre.setter
     def nombre(self, nuevoNombre: str) -> None:
         self._nombre = nuevoNombre
@@ -77,5 +80,7 @@ class EstacionSismologica:
         return self._nroCertificacionAdquisicion
 
     @nroCertificacionAdquisicion.setter
-    def nroCertificacionAdquisicion(self, nuevoNroCertificacionAdquisicion: int) -> None:
+    def nroCertificacionAdquisicion(
+        self, nuevoNroCertificacionAdquisicion: int
+    ) -> None:
         self._nroCertificacionAdquisicion = nuevoNroCertificacionAdquisicion

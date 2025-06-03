@@ -4,13 +4,13 @@ class OrigenDeGeneracion:
         self._descripcion: str = descripcion
         self._nombre: str = nombre
 
-    #Metodos utilizados en el CU23
+    # Metodos utilizados en el CU23
 
     @property
     def nombre(self) -> str:
         return self._nombre
 
-    #Métodos de acceso (getters y setters)
+    # Métodos de acceso (getters y setters)
 
     @nombre.setter
     def nombre(self, nuevoNombre: str) -> None:

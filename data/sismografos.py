@@ -4,7 +4,6 @@ from entities.ModeloSismografo import ModeloSismografo
 from entities.Sismografo import Sismografo
 from data.estacionesSismologicas import estacionSismologica_data
 from data.estados import estado_data
-from data.seriesTemporales import serieTemporal_data
 from data.empleados import Empleado0
 
 Sismografo0 = Sismografo(
@@ -16,10 +15,7 @@ Sismografo0 = Sismografo(
     modeloSismografo=ModeloSismografo(),
 )
 
-Sismografo0._cambiosEstado.append(
-    CambioEstado(estado_data[0], Empleado0, datetime.now())
-)
-Sismografo0._seriesTemporales = [serieTemporal_data[0]]
+Sismografo0._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
 
 Sismografo1 = Sismografo(
     fechaAdquisicion=date(2007, 6, 2),
@@ -30,7 +26,6 @@ Sismografo1 = Sismografo(
     modeloSismografo=ModeloSismografo(),
 )
 Sismografo1._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
-Sismografo1._seriesTemporales = [serieTemporal_data[1], serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
 
 Sismografo2 = Sismografo(
     fechaAdquisicion=date(2009, 12, 2),
@@ -41,6 +36,5 @@ Sismografo2 = Sismografo(
     modeloSismografo=ModeloSismografo(),
 )
 Sismografo2._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
-Sismografo2._seriesTemporales = [serieTemporal_data[2]]
 
 sismografo_data = [Sismografo0, Sismografo1, Sismografo2]
