@@ -150,7 +150,7 @@ class GestorRegistrarRevision:
             )
 
     def generarSismograma(self) -> None:
-        self._sismograma = "../data/sismograma.png"
+        self._sismograma = "../data/sismograma.png" #que este metodo llame a una clase aparte, en otro archivo que representa el CU y nos pase el src
 
     def tomarSeleccionRevision(self, revision: str, datosEvento: list[str]) -> bool:
         self._tieneDatosValidos = self.validarDatosEventoSismico(revision, datosEvento)

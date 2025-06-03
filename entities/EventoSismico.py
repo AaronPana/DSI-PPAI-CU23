@@ -151,7 +151,7 @@ class EventoSismico:
 
     def revisar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
-    ) -> None:
+    ) -> None: #usar fecha hora que obtenemos por parametro (sino incosistencia de minutos/seg)
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
         respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
@@ -179,7 +179,7 @@ class EventoSismico:
         ][0]
         return cambioEstadoActual
 
-    def crearCambioEstado(
+    def crearCambioEstado( #RECORDAR PUNTERO A NUEVOESTADO
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
     ) -> None:
         nuevoCambioEstado: CambioEstado = CambioEstado(

@@ -65,4 +65,5 @@ eventoSismico2 = EventoSismico(
 eventoSismico2._cambiosEstado = [cambioEstado_data[4], cambioEstado_data[5]] #PENDIENTE_REVISION
 eventoSismico2._seriesTemporales = [serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
 
-eventoSismico_data = [eventoSismico0, eventoSismico1, eventoSismico2]
+eventoSismico_data = [eventoSismico1]
+#eventoSismico_data = [eventoSismico0, eventoSismico1, eventoSismico2]

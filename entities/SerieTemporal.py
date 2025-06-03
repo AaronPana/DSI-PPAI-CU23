@@ -42,8 +42,8 @@ class SerieTemporal:
         ]
 
         infoSerieTemporal: InfoSerieTemporal = {
-            "estacionSismologica": self._sismografo.getNombreEstacionSismologica(),
-            "fechaHoraRegistro": self._fechaHoraRegistro.strftime("%d/%m/%Y %H:%M:%S"),
+            "estacionSismologica": self._sismografo.getNombreEstacionSismologica(), #metodo sismografo referencia - esto es relacion de atributo no dependencia
+            "fechaHoraRegistro": self._fechaHoraRegistro.strftime("%d/%m/%Y %H:%M:%S"), 
             "frecuenciaMuestreo": str(self._frecuenciaMuestreo),
             "condicionAlarma": "SI" if self._condicionAlarma else "NO",
             "datosMuestras": datosMuestras,
