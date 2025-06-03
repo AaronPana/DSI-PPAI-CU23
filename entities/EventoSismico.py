@@ -153,16 +153,24 @@ class EventoSismico:
     ) -> None:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        if respuesta:
+            return True
+        else:
+            return False
 
     # La implementacion de revisar() y rechazar() es exactamente la misma debido a que
     # se busca diferenciar los eventos tal cual esta en el diagrama de maquina de estados
     def rechazar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
-    ) -> None:
+    ) -> bool:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        if respuesta:
+            return True
+        else:
+            return False
 
     def buscarCambioEstado(self) -> CambioEstado:
         cambioEstadoActual: CambioEstado = [
@@ -177,6 +185,7 @@ class EventoSismico:
             nuevoEstado, responsable, fechaHoraInicio
         )
         self._cambiosEstado.append(nuevoCambioEstado)
+        return nuevoCambioEstado
 
     #Métodos de acceso (getters y setters)
 

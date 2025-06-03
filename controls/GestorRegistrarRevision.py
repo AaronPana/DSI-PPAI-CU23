@@ -112,7 +112,7 @@ class GestorRegistrarRevision:
     # La implementacion de revisarEventoSismico() y rechazarEventoSismico() es casi la misma debido a que
     # se busca diferenciar los eventos tal cual esta en la maquia de estados
     # En este caso ya no es necesario busacr el responsable
-    def rechazarEventoSismico(self) -> None:
+    def rechazarEventoSismico(self) -> bool:
         nuevoEstado: Estado = [
             estado
             for estado in self._estados
@@ -125,9 +125,11 @@ class GestorRegistrarRevision:
             self._eventoSismicoSeleccionado is not None
             and self._responsable is not None
         ):
-            self._eventoSismicoSeleccionado.rechazar(
-                nuevoEstado, self._responsable, fechaHoraActual
-            )
+            respuesta = self._eventoSismicoSeleccionado.rechazar(nuevoEstado, self._responsable, fechaHoraActual)
+        if respuesta: 
+            return True
+        else:
+            return False
 
     def buscarUsuario(self) -> Empleado:
         return self._sesion.obtenerUsuario()
@@ -147,7 +149,13 @@ class GestorRegistrarRevision:
     def tomarSeleccionRevision(self, revision: str, datosEvento: list[str]) -> None:
         self._tieneDatosValidos = self.validarDatosEventoSismico(revision, datosEvento)
         if self._tieneDatosValidos and revision == "RECHAZAR":
-            self.rechazarEventoSismico()
+            respuesta = self.rechazarEventoSismico()
+            if respuesta: 
+                return True
+            else: 
+                return False
+        else: 
+            return False
         # Si se quisiera seguir con el flujo, registrando otra accion en otro evento...
         # self.seleccionDatosEventosSismicos()
 
