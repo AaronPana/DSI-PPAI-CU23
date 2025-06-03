@@ -18,14 +18,15 @@ class Main:
         self.boundary_registrar = BoundaryRegistrarRevision(self.page)
         boton = ft.ElevatedButton(
             text="Registrar revisión manual",
-            on_click=self.boundary_registrar.registrarRevisionManual 
-        )
+            on_click=lambda e: [
+                self.page.controls.clear(), 
+                self.boundary_registrar.registrarRevisionManual()
+            ])
 
         self.page.add(
             ft.Column([
                 ft.Text("Sistema de Monitoreo Sísmico", size=20, weight="bold"),
-                boton
-            ],
+                boton],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER)
         )
@@ -44,5 +45,6 @@ class Main:
         sismografo_data[0]._seriesTemporales = [serieTemporal_data[0]]
         sismografo_data[1]._seriesTemporales = [serieTemporal_data[1], serieTemporal_data[3], serieTemporal_data[4], serieTemporal_data[5]]
         sismografo_data[2]._seriesTemporales = [serieTemporal_data[2]]
+    
 
 Main()

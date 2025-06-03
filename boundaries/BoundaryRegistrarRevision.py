@@ -1,7 +1,6 @@
 import flet as ft
 from datetime import datetime
 
-
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controls.GestorRegistrarRevision import GestorRegistrarRevision
@@ -19,9 +18,9 @@ class BoundaryRegistrarRevision:
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico", on_click=lambda e: self.guardarCambiosEvento)
         self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion", on_click=lambda e: self.cancelarCambiosEvento)
-        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar)
+        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar())
         self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa)
-        self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision(self.campos_evento))
+        self._btnRegistrarAccion = ft.ElevatedButton(text="Registrar", on_click=lambda e: self.tomarSeleccionRevision())
 
         self._dropdownAccionRevision = ft.Dropdown(
             label="Acción de revisión",
@@ -91,7 +90,7 @@ class BoundaryRegistrarRevision:
         self._eventosSismicosNoRevisados = []
         self._grillaEventosSismicosNoRevisados = ft.DataTable(
             columns=[
-                ft.DataColumn(label=ft.Text("Fecha y Hora")),
+                ft.DataColumn(label=ft.Text("Fecha y Hora Ocurrencia")),
                 ft.DataColumn(label=ft.Text("Lat. Epicentro")),
                 ft.DataColumn(label=ft.Text("Long. Epicentro")),
                 ft.DataColumn(label=ft.Text("Lat. Hipocentro")),
@@ -160,10 +159,10 @@ class BoundaryRegistrarRevision:
 
     # METODOS DE BOUNDARY
 
-    def registrarRevisionManual(self, evento):
-        self.habilitarVentana(evento)
+    def registrarRevisionManual(self):
+        self.habilitarVentana()
 
-    def habilitarVentana(self, e):
+    def habilitarVentana(self):
         self._page.theme_mode = ft.ThemeMode.LIGHT
         self._page.title = "Red Sísmica"
         self._page.scroll = ft.ScrollMode.AUTO
@@ -200,13 +199,15 @@ class BoundaryRegistrarRevision:
         else:
             self._grillaEventosSismicosNoRevisados.rows = []
             self._grillaEventosSismicosNoRevisados.visible = False
-            self._mensajeSinEventos = ft.Text(
-                "No hay sismos auto detectados que aún no han sido revisados.",
-                size=18,
-                color=ft.Colors.RED_700,
-                weight="bold",
+            dlg = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("❌ Error"),
+                content=ft.Text("No hay sismos auto detectados que aún no han sido revisados."),
+                actions=[
+                    ft.TextButton("Aceptar", on_click=lambda e: self._page.close(dlg))
+                ],
             )
-            self._page.controls.append(self._mensajeSinEventos)
+            self._page.open(dlg)
 
         self._page.update()
 
@@ -316,11 +317,8 @@ class BoundaryRegistrarRevision:
             self.campos_evento[campo].disabled = False
         self.barra_edicion.visible = True
         index_seleccionado = next(
-            (
-                i
-                for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows)
-                if row.selected
-            ),
+            (i for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows)
+                if row.selected),
             None,
         )
         if index_seleccionado is not None:
@@ -399,10 +397,7 @@ class BoundaryRegistrarRevision:
             "SOLICITAR REVISION": "SOLICITAR_REVISION",
         }.get(accion, "")
         if accion_mapeada:
-            print(accion_mapeada, datos_evento)
-            resultado = self._gestorRegistrarRevision.tomarSeleccionRevision(
-                accion_mapeada, datos_evento
-            )
+            resultado = self._gestorRegistrarRevision.tomarSeleccionRevision(accion_mapeada, datos_evento)
             if resultado:
                 dlg = ft.AlertDialog(
                     modal=True,
@@ -414,8 +409,8 @@ class BoundaryRegistrarRevision:
                 )
                 self._page.open(dlg)
     
-    def cancelar():
-        pass
+    def cancelar(self):
+        self._page.window.destroy()
 
     def finCasoUso(self, e):
         pass
