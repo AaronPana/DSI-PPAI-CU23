@@ -4,7 +4,7 @@ from datetime import datetime
 
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
-        from controls.GestorRegistrarRevision import GestorRegistrarRevision
+        from controllers.GestorRegistrarRevision import GestorRegistrarRevision
 
         self._gestorRegistrarRevision: GestorRegistrarRevision = (
             GestorRegistrarRevision(self, datetime.now())
@@ -58,7 +58,7 @@ class BoundaryRegistrarRevision:
                         "Sismograma",
                         size=16,
                         weight=ft.FontWeight.BOLD,
-                        color=ft.colors.BLUE_800,
+                        color=ft.Colors.BLUE_800,
                         text_align=ft.TextAlign.CENTER,
                     ),
                     ft.Container(
@@ -72,7 +72,7 @@ class BoundaryRegistrarRevision:
             ),
             width=420,
             height=300,
-            bgcolor=ft.colors.GREY_100,
+            bgcolor=ft.Colors.GREY_100,
             border_radius=10,
             padding=15,
             alignment=ft.alignment.center,
@@ -114,7 +114,7 @@ class BoundaryRegistrarRevision:
                 ft.DataColumn(label=ft.Text("Magnitud")),
             ],
             rows=[],
-            heading_row_color=ft.colors.BLUE_800,
+            heading_row_color=ft.Colors.BLUE_800,
             expand=True,
         )
 
@@ -125,7 +125,7 @@ class BoundaryRegistrarRevision:
             visible=False,
             width=950,
             height=280,
-            bgcolor=ft.colors.GREY_100,
+            bgcolor=ft.Colors.GREY_100,
             border_radius=10,
             padding=10,
         )
@@ -290,7 +290,7 @@ class BoundaryRegistrarRevision:
                         content=ft.Text(
                             f"Muestra: {muestra['fechaHoraMuestra']}\n{detalles}"
                         ),
-                        bgcolor=ft.colors.BLUE_50,
+                        bgcolor=ft.Colors.BLUE_50,
                         padding=8,
                         border_radius=8,
                     )
@@ -313,7 +313,7 @@ class BoundaryRegistrarRevision:
                         ],
                         spacing=8,
                     ),
-                    bgcolor=ft.colors.GREY_200,
+                    bgcolor=ft.Colors.GREY_200,
                     padding=10,
                     border_radius=10,
                 )

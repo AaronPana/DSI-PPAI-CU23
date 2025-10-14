@@ -10,9 +10,9 @@ class Main:
         self.page = page
         self.page.theme_mode = ft.ThemeMode.LIGHT
         self.page.title = "Red Sísmica"
-        self.page.window_maximized = True
+        self.page.window.maximized = True
         self.page.scroll = ft.ScrollMode.AUTO
-        self.page.window_resizable = True
+        self.page.window.resizable = True
         self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.inicializar_relaciones()
 
