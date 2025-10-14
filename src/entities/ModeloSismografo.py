@@ -1,0 +1,2 @@
+class ModeloSismografo:
+    pass
