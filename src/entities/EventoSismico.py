@@ -8,6 +8,7 @@ from entities.Estado import Estado
 from entities.MagnitudRichter import MagnitudRichter
 from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from entities.SerieTemporal import SerieTemporal
+from entities.Sismografo import Sismografo
 
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
@@ -15,7 +16,6 @@ InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
 
 class EventoSismico:
-
     def __init__(
         self,
         fechaHoraFin: datetime,
@@ -109,18 +109,22 @@ class EventoSismico:
         }
         return infoBasicaEventoSismico
 
-    def getDatosEventoSismico(self) -> InfoDatosSismicos:
+    def getDatosEventoSismico(
+        self, sismografos: list["Sismografo"]
+    ) -> InfoDatosSismicos:
         """
         rtype: InfoDatosSismicos
         return: diccionario con datos sismicos del evento que
         incluye todos los detalles de todas las muestras de todas las series temporales
         """
 
-        nombreAlcanceSismico = self._alcanceSismo.nombre
-        nombreOrigenDeGeneracion = self._origenDeGeneracion.nombre
-        nombreClasificacionSismo = self._clasificacionSisimo.nombre
+        nombreAlcanceSismico: str = self._alcanceSismo.nombre
+        nombreOrigenDeGeneracion: str = self._origenDeGeneracion.nombre
+        nombreClasificacionSismo: str = self._clasificacionSisimo.nombre
 
-        infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatosSeriesTemporales()
+        infoSeriesTemporales: list[InfoSerieTemporal] = self.getDatosSeriesTemporales(
+            sismografos
+        )
 
         infoSerieTemporalesOrdenadas: list[InfoSerieTemporal] = (
             self.ordenarSeriesTemporalesPorEstacionSismologica(infoSeriesTemporales)
@@ -134,13 +138,15 @@ class EventoSismico:
         }
         return infoDatosSismicos
 
-    def getDatosSeriesTemporales(self) -> list[InfoSerieTemporal]:
+    def getDatosSeriesTemporales(
+        self, sismografos: list["Sismografo"]
+    ) -> list[InfoSerieTemporal]:
         """
         rtype: list[InfoSerieTemporal]
         return: diccionario con todos los detalles de todas las muestras de todas las series temporales
         """
         infoSeriesTemporales: list[InfoSerieTemporal] = [
-            serie.getDatos() for serie in self._seriesTemporales
+            serie.getDatos(sismografos) for serie in self._seriesTemporales
         ]
         return infoSeriesTemporales
 
@@ -151,7 +157,7 @@ class EventoSismico:
 
     def revisar(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
-    ) -> None:
+    ) -> bool:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
         respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
@@ -181,11 +187,12 @@ class EventoSismico:
 
     def crearCambioEstado(
         self, nuevoEstado: Estado, responsable: Empleado, fechaHoraInicio: datetime
-    ) -> None:
+    ) -> CambioEstado:
         nuevoCambioEstado: CambioEstado = CambioEstado(
             nuevoEstado, responsable, fechaHoraInicio
         )
         self._cambiosEstado.append(nuevoCambioEstado)
+        self._estadoActual = nuevoEstado
         return nuevoCambioEstado
 
     # Métodos de acceso (getters y setters)
