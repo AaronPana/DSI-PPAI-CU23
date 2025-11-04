@@ -6,18 +6,22 @@ from data.estados import estado_data
 from data.eventosSismicos import eventoSismico_data
 from data.sesiones import Sesion0
 from data.sismografos import sismografo_data
+
 from entities.Empleado import Empleado
 from entities.Estado import Estado
 from entities.EventoSismico import EventoSismico
 from entities.Sesion import Sesion
 from entities.Sismografo import Sismografo
 
+from iterator.IAgregado import IAgregado
+from iterator.IIteradorEventosSismicos import IteradorEventosSismicos
+
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
 
-class GestorRegistrarRevision:
+class GestorRegistrarRevision(IAgregado): #Hereda de IAgregado para el Patron Iterator
     def __init__(
         self,
         boundaryRegistrarRevision: BoundaryRegistrarRevision,
@@ -57,14 +61,22 @@ class GestorRegistrarRevision:
         self._boundaryRegistrarRevision.mostrarDatosEventosSismicos(
             self._datosEventosSismicosNoRevisados
         )
-
+    
+    # Modificado respecto al Patron Iterador
     def obtenerEventosSismicosNoRevisados(self) -> None:
-        for evento in self._eventos:
-            if evento.esAutoDetectado() or evento.esPendienteRevision():
-                # Esta separacion de objetos y datos se hace debido a que
-                # el gestor debe manejar los objetos pero el boundary no debe conocerlos
-                self._eventosSismicosNoRevisados.append(evento)
-                self._datosEventosSismicosNoRevisados.append(evento.getDatos())
+        iteradorEventosSismicos: IteradorEventosSismicos = self.crearIterador(self._eventos)
+        iteradorEventosSismicos.primero()
+
+        while not iteradorEventosSismicos.haFinalizado():
+            if iteradorEventosSismicos.comprobarFiltro():
+                evento: EventoSismico = iteradorEventosSismicos.elementoActual()
+                if evento is not None:
+                    self._eventosSismicosNoRevisados.append(evento)
+                    self._datosEventosSismicosNoRevisados.append(evento.getDatos())
+            iteradorEventosSismicos.siguiente()
+
+    def crearIterador(listaElementos: list[EventoSismico]) -> IteradorEventosSismicos:
+        return IteradorEventosSismicos(listaElementos)
 
     def ordenarPorFechaHoraOcurrencia(self) -> None:
         self._eventosSismicosNoRevisados.sort(
