@@ -1,11 +1,11 @@
 from datetime import datetime
-from entities.Estado import Estado
+
 from entities.Empleado import Empleado
+from entities.Estado import Estado
 from entities.MotivoFueraServicio import MotivoFueraServicio
 
 
 class CambioEstado:
-
     def __init__(
         self,
         estado: Estado,

@@ -1,6 +1,6 @@
+from data.empleados import empleado_data
 from entities.Suscripcion import Suscripcion
 from entities.Usuario import Usuario
-from data.empleados import empleado_data
 
 usuario0 = Usuario(
     contraseña="1234",
@@ -23,4 +23,4 @@ usuario2 = Usuario(
     suscripcion=Suscripcion(),
 )
 
-usuario_data = [usuario0, usuario1, usuario2]
+usuario_data: list[Usuario] = [usuario0, usuario1, usuario2]

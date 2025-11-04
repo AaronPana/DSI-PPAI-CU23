@@ -1,8 +1,9 @@
+# from __future__ import annotations
 from datetime import datetime
+from typing import TYPE_CHECKING
+
 from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from entities.Sismografo import Sismografo
@@ -12,37 +13,37 @@ InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 
 
 class SerieTemporal:
-
     def __init__(
         self,
         condicionAlarma: bool,
         fechaHoraInicioRegistroMuestras: datetime,
         fechaHoraRegistro: datetime,
-        frecuenciaMuestreo: int,
+        frecuenciaMuestreo: float,
         estado: Estado,
-        sismografo: "Sismografo",
     ) -> None:
         self._condicionAlarma: bool = condicionAlarma
         self._fechaHoraInicioRegistroMuestra: datetime = fechaHoraInicioRegistroMuestras
         self._fechaHoraRegistro: datetime = fechaHoraRegistro
-        self._frecuenciaMuestreo: int = frecuenciaMuestreo
+        self._frecuenciaMuestreo: float = frecuenciaMuestreo
         self._estado: Estado = estado
-        self._sismografo: "Sismografo" = sismografo
         self._muestrasSismicas: list[MuestraSismica] = []
 
     # Metodos utilizados en el CU23
 
-    def getDatos(self) -> InfoSerieTemporal:
+    def getDatos(self, sismografos: list["Sismografo"]) -> InfoSerieTemporal:
         """
         rtype: InfoSerieTemporal
         return: diccionario con datos y lista de muestras de la serie temporal
         """
+
+        sismografo: Sismografo = self.esMiSismografo(sismografos)
+
         datosMuestras: list[InfoMuestra] = [
             muestra.getDatos() for muestra in self._muestrasSismicas
         ]
 
         infoSerieTemporal: InfoSerieTemporal = {
-            "estacionSismologica": self._sismografo.getNombreEstacionSismologica(),
+            "estacionSismologica": sismografo.getNombreEstacionSismologica(),
             "fechaHoraRegistro": self._fechaHoraRegistro.strftime("%d/%m/%Y %H:%M:%S"),
             "frecuenciaMuestreo": str(self._frecuenciaMuestreo),
             "condicionAlarma": "SI" if self._condicionAlarma else "NO",
@@ -50,6 +51,11 @@ class SerieTemporal:
         }
 
         return infoSerieTemporal
+
+    def esMiSismografo(self, sismografos: list["Sismografo"]) -> "Sismografo":
+        return [sismografo for sismografo in sismografos if sismografo.esMiSerie(self)][
+            0
+        ]
 
     # Métodos de acceso (getters y setters)
 
@@ -80,7 +86,7 @@ class SerieTemporal:
         self._fechaHoraRegistro = nuevaFechaHoraRegistro
 
     @property
-    def frecuenciaMuestreo(self) -> int:
+    def frecuenciaMuestreo(self) -> float:
         return self._frecuenciaMuestreo
 
     @frecuenciaMuestreo.setter
@@ -101,7 +107,7 @@ class SerieTemporal:
 
     @sismografo.setter
     def sismografo(self, nuevoSismografo: "Sismografo") -> None:
-        self._sismografo = nuevoSismografo
+        self._sismografo: Sismografo = nuevoSismografo
 
     @property
     def muestrasSismicas(self) -> list[MuestraSismica]:

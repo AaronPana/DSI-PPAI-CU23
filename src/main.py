@@ -1,4 +1,5 @@
 import flet as ft
+
 from boundaries.BoundaryRegistrarRevision import BoundaryRegistrarRevision
 
 
@@ -44,12 +45,12 @@ class Main:
         from data.seriesTemporales import serieTemporal_data
         from data.sismografos import sismografo_data
 
-        serieTemporal_data[0].sismografo = sismografo_data[0]
-        serieTemporal_data[1].sismografo = sismografo_data[1]
-        serieTemporal_data[2].sismografo = sismografo_data[2]
-        serieTemporal_data[3].sismografo = sismografo_data[1]
-        serieTemporal_data[4].sismografo = sismografo_data[1]
-        serieTemporal_data[5].sismografo = sismografo_data[1]
+        # serieTemporal_data[0].sismografo = sismografo_data[0]
+        # serieTemporal_data[1].sismografo = sismografo_data[1]
+        # serieTemporal_data[2].sismografo = sismografo_data[2]
+        # serieTemporal_data[3].sismografo = sismografo_data[1]
+        # serieTemporal_data[4].sismografo = sismografo_data[1]
+        # serieTemporal_data[5].sismografo = sismografo_data[1]
 
         sismografo_data[0]._seriesTemporales = [serieTemporal_data[0]]
         sismografo_data[1]._seriesTemporales = [

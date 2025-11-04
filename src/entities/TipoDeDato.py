@@ -1,5 +1,4 @@
 class TipoDeDato:
-
     def __init__(
         self, denominacion: str, nombreUnidadMedida: str, valorUmbral: tuple[int, int]
     ) -> None:

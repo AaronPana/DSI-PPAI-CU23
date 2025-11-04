@@ -13,7 +13,7 @@ Estado9 = Estado(ambito="EVENTO_SISMICO", nombreEstado="PENDIENTE_CIERRE")
 Estado10 = Estado(ambito="EVENTO_SISMICO", nombreEstado="CERRADO")
 Estado11 = Estado(ambito="SERIE_TEMPORAL", nombreEstado="TRANSMITIDA")
 
-estado_data = [
+estado_data: list[Estado] = [
     Estado0,
     Estado1,
     Estado2,
@@ -25,5 +25,5 @@ estado_data = [
     Estado8,
     Estado9,
     Estado10,
-    Estado11
+    Estado11,
 ]

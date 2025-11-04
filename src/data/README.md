@@ -1,7 +1,9 @@
 # DICCIONARIO
+
 ## Nomenclatura
 
 ### Nombrar el archivo
+
 El archivo se nombrara con el mismo nombre de la clase en plural
 
 Ejemplo: eventosSismicos.py
@@ -13,8 +15,8 @@ El diccionario en sí debe nombrarse utilizando el siguiente formato: nombreClas
 Ejemplo: eventoSismico_data
 
 ### Nombrar los objetos
-        
-Cada registro tendrá un identificador generado a partir de las iniciales de la clase seguido de un número secuencial. Por ejemplo, para la clase EventoSismico, el identificador será el nombre de la clase en PascalCase más un número creciente: NombreClaseN 
+
+Cada registro tendrá un identificador generado a partir de las iniciales de la clase seguido de un número secuencial. Por ejemplo, para la clase EventoSismico, el identificador será el nombre de la clase en PascalCase más un número creciente: NombreClaseN
 
 Ejemplo: "AlcanceSismo1", "AlcanceSismo2", ..., "AlcanceSismoN".
 
@@ -46,6 +48,7 @@ En cualquier otra parte se nombrara siguiendo las indicaciones del dominio
 - [x] Usuario.py
 
 ### Clases para las que no se ha creado un data
+
 Para estas clases, si son necesarias en los atributos, se ha establecido como "None"
 
 - [-] MagnitudRichter.py

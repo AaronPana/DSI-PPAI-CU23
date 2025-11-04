@@ -23,4 +23,4 @@ Empleado2 = Empleado(
     rol=Rol(),
 )
 
-empleado_data = [Empleado0, Empleado1, Empleado2]
+empleado_data: list[Empleado] = [Empleado0, Empleado1, Empleado2]

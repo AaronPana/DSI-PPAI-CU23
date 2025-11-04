@@ -4,7 +4,6 @@ from entities.Suscripcion import Suscripcion
 
 
 class Usuario:
-
     def __init__(
         self,
         contraseña: str,

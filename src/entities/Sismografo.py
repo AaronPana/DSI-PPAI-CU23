@@ -1,15 +1,18 @@
+# from __future__ import annotations
 from datetime import date
+from typing import TYPE_CHECKING
 
 from entities.CambioEstado import CambioEstado
 from entities.EstacionSismologica import EstacionSismologica
 from entities.Estado import Estado
 from entities.ModeloSismografo import ModeloSismografo
 from entities.Reparacion import Reparacion
-from entities.SerieTemporal import SerieTemporal
+
+if TYPE_CHECKING:
+    from entities.SerieTemporal import SerieTemporal
 
 
 class Sismografo:
-
     def __init__(
         self,
         fechaAdquisicion: date,
@@ -28,7 +31,7 @@ class Sismografo:
         # No implementamos un metodo para asociar reparaciones ya que no se requiere para el CU23
         self._reparaciones: list[Reparacion] = []
         # Como debería implementarse la lógica de asociación ??
-        self._seriesTemporales: list[SerieTemporal] = []
+        self._seriesTemporales: list["SerieTemporal"] = []
         # No deberia recibir los cambios de estado sino irlos creando y asignando los estados
         self._cambiosEstado: list[CambioEstado] = []
         # Primer cambio de estado
@@ -52,6 +55,9 @@ class Sismografo:
 
     def getNombreEstacionSismologica(self) -> str:
         return self._estacionSismologica.nombre
+
+    def esMiSerie(self, serie: "SerieTemporal") -> bool:
+        return any(serie == serieTemporal for serieTemporal in self._seriesTemporales)
 
     # No implementamos un metodo para crear cambios de estado en la clase sismografo
     # ya que no se requiere para el CU23
@@ -93,11 +99,11 @@ class Sismografo:
         self._reparaciones = nuevaReparaciones
 
     @property
-    def seriesTemporales(self) -> list[SerieTemporal]:
+    def seriesTemporales(self) -> list["SerieTemporal"]:
         return self._seriesTemporales
 
     @seriesTemporales.setter
-    def seriesTemporales(self, nuevaSeriesTemporales: list[SerieTemporal]) -> None:
+    def seriesTemporales(self, nuevaSeriesTemporales: list["SerieTemporal"]) -> None:
         self._seriesTemporales = nuevaSeriesTemporales
 
     @property

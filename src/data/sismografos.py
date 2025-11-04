@@ -1,10 +1,11 @@
 from datetime import date, datetime
+
+from data.empleados import Empleado0
+from data.estacionesSismologicas import estacionSismologica_data
+from data.estados import estado_data
 from entities.CambioEstado import CambioEstado
 from entities.ModeloSismografo import ModeloSismografo
 from entities.Sismografo import Sismografo
-from data.estacionesSismologicas import estacionSismologica_data
-from data.estados import estado_data
-from data.empleados import Empleado0
 
 Sismografo0 = Sismografo(
     fechaAdquisicion=date(2004, 4, 3),
@@ -15,7 +16,7 @@ Sismografo0 = Sismografo(
     modeloSismografo=ModeloSismografo(),
 )
 
-Sismografo0._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
+Sismografo0.cambiosEstados = [CambioEstado(estado_data[0], Empleado0, datetime.now())]
 
 Sismografo1 = Sismografo(
     fechaAdquisicion=date(2007, 6, 2),
@@ -25,7 +26,7 @@ Sismografo1 = Sismografo(
     estadoActual=estado_data[0],
     modeloSismografo=ModeloSismografo(),
 )
-Sismografo1._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
+Sismografo1.cambiosEstados = [CambioEstado(estado_data[0], Empleado0, datetime.now())]
 
 Sismografo2 = Sismografo(
     fechaAdquisicion=date(2009, 12, 2),
@@ -35,6 +36,6 @@ Sismografo2 = Sismografo(
     estadoActual=estado_data[0],
     modeloSismografo=ModeloSismografo(),
 )
-Sismografo2._cambiosEstado.append(CambioEstado(estado_data[0], Empleado0, datetime.now()))
+Sismografo2.cambiosEstados = [CambioEstado(estado_data[0], Empleado0, datetime.now())]
 
-sismografo_data = [Sismografo0, Sismografo1, Sismografo2]
+sismografo_data: list[Sismografo] = [Sismografo0, Sismografo1, Sismografo2]

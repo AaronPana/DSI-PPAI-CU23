@@ -2,7 +2,6 @@ from entities.TipoDeDato import TipoDeDato
 
 
 class DetalleMuestraSismica:
-
     def __init__(self, tipoDeDato: TipoDeDato, valor: float) -> None:
         self._tipoDeDato: TipoDeDato = tipoDeDato
         self._valor: float = valor
@@ -14,8 +13,8 @@ class DetalleMuestraSismica:
         rtype: dict[str, str]
         return: denominacion, valor y tipo de dato
         """
-        infoTipoDeDato = self._tipoDeDato.getDatos()
-        infoDetalle = {
+        infoTipoDeDato: dict[str, str] = self._tipoDeDato.getDatos()
+        infoDetalle: dict[str, str] = {
             "denominacion": infoTipoDeDato["denominacion"],
             "valor": str(self._valor),
             "nombreUnidadMedida": infoTipoDeDato["nombreUnidadMedida"],

@@ -1,5 +1,4 @@
 class Estado:
-
     def __init__(self, ambito: str, nombreEstado: str) -> None:
         self._ambito: str = ambito
         self._nombreEstado: str = nombreEstado

@@ -19,7 +19,7 @@ class Empleado:
 
     # Asumo que se debe acceder a este dato mediante rol:Rol
     # pero como no lo modelamos, lo dejo con un pass
-    def esResponsableDeReparacion(self):
+    def esResponsableDeReparacion(self) -> None:
         pass
 
     # Métodos de acceso (getters y setters)

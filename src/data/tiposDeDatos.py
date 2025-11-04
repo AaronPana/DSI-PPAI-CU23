@@ -18,4 +18,4 @@ TipoDeDato2 = TipoDeDato(
     valorUmbral=(0, 100),
 )
 
-tipoDeDato_data = [TipoDeDato0, TipoDeDato1, TipoDeDato2]
+tipoDeDato_data: list[TipoDeDato] = [TipoDeDato0, TipoDeDato1, TipoDeDato2]
