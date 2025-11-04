@@ -75,7 +75,7 @@ class GestorRegistrarRevision(IAgregado): #Hereda de IAgregado para el Patron It
                     self._datosEventosSismicosNoRevisados.append(evento.getDatos())
             iteradorEventosSismicos.siguiente()
 
-    def crearIterador(listaElementos: list[EventoSismico]) -> IteradorEventosSismicos:
+    def crearIterador(self, listaElementos: list[EventoSismico]) -> IteradorEventosSismicos:
         return IteradorEventosSismicos(listaElementos)
 
     def ordenarPorFechaHoraOcurrencia(self) -> None:

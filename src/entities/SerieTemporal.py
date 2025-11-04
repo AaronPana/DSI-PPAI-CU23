@@ -57,7 +57,7 @@ class SerieTemporal(IAgregado):  # Hereda de IAgregado para el Patron Iterator
         return infoSerieTemporal
     
     # Modificado respecto al Patron Iterador
-    def crearIterador(listaElementos: list[MuestraSismica]) -> IteradorMuestrasSismicas:
+    def crearIterador(self, listaElementos: list[MuestraSismica]) -> IteradorMuestrasSismicas:
         return IteradorMuestrasSismicas(listaElementos)
 
     def esMiSismografo(self, sismografos: list["Sismografo"]) -> "Sismografo":

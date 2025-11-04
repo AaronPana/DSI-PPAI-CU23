@@ -1,6 +1,6 @@
 class IAgregado:
     @staticmethod
-    def crearIterador(listaElementos: list) -> object:
+    def crearIterador(self, listaElementos: list) -> object:
         if not listaElementos:
             return None
 
