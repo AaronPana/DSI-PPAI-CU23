@@ -150,7 +150,7 @@ class EventoSismico(IAgregado):
 
         iteradorSeriesTemporales.primero()
         while not iteradorSeriesTemporales.haFinalizado():
-            serieTemporalActual = iteradorSeriesTemporales.elementoActual()
+            serieTemporalActual: SerieTemporal = iteradorSeriesTemporales.elementoActual()
             if serieTemporalActual:
                 datosSerieTemporal: SerieTemporal = serieTemporalActual.getDatos(sismografos)
                 infoSeriesTemporales.append(datosSerieTemporal)
@@ -159,7 +159,7 @@ class EventoSismico(IAgregado):
         return infoSeriesTemporales
 
     # Modificado respecto al Patron Iterador
-    def crearIterador(listaElementos: list[SerieTemporal]) -> IteradorSeriesTemporales:
+    def crearIterador(self, listaElementos: list[SerieTemporal]) -> IteradorSeriesTemporales:
         return IteradorSeriesTemporales(listaElementos)
 
     def ordenarSeriesTemporalesPorEstacionSismologica(
