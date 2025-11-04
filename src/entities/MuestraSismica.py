@@ -1,11 +1,11 @@
 from datetime import datetime
+
 from entities.DetalleMuestraSismica import DetalleMuestraSismica
 
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 
 
 class MuestraSismica:
-
     def __init__(self, fechaHoraMuestra: datetime) -> None:
         self._fechaHoraMuestra: datetime = fechaHoraMuestra
         self._detallesMuestraSismica: list[DetalleMuestraSismica] = []

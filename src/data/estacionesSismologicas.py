@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from entities.EstacionSismologica import EstacionSismologica
 
 EstacionSismologica0 = EstacionSismologica(
@@ -31,7 +32,7 @@ EstacionSismologica2 = EstacionSismologica(
     nroCertificacionAdquisicion=3563,
 )
 
-estacionSismologica_data = [
+estacionSismologica_data: list[EstacionSismologica] = [
     EstacionSismologica0,
     EstacionSismologica1,
     EstacionSismologica2,

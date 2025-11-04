@@ -1,24 +1,27 @@
 from datetime import datetime
-from entities.MuestraSismica import MuestraSismica
+
 from data.detallesMuestrasSismicas import detalleMuestraSismica_data
+from entities.MuestraSismica import MuestraSismica
 
 # Son de SerieTemporal0
 muestraSismica0 = MuestraSismica(fechaHoraMuestra=datetime(2025, 2, 21, 19, 5))
-muestraSismica0._detallesMuestraSismica = [
+muestraSismica0.detallesMuestraSismica = [
     detalleMuestraSismica_data[0],
     detalleMuestraSismica_data[1],
     detalleMuestraSismica_data[2],
 ]
 
-muestraSismica1 = MuestraSismica(fechaHoraMuestra=datetime(2025, 2, 21, 19, 10),)
-muestraSismica1._detallesMuestraSismica = [
+muestraSismica1 = MuestraSismica(
+    fechaHoraMuestra=datetime(2025, 2, 21, 19, 10),
+)
+muestraSismica1.detallesMuestraSismica = [
     detalleMuestraSismica_data[3],
     detalleMuestraSismica_data[4],
     detalleMuestraSismica_data[5],
 ]
 
 muestraSismica2 = MuestraSismica(fechaHoraMuestra=datetime(2025, 2, 21, 19, 15))
-muestraSismica2._detallesMuestraSismica = [
+muestraSismica2.detallesMuestraSismica = [
     detalleMuestraSismica_data[6],
     detalleMuestraSismica_data[7],
     detalleMuestraSismica_data[8],
@@ -26,14 +29,16 @@ muestraSismica2._detallesMuestraSismica = [
 
 # Son de SerieTemporal1
 muestraSismica3 = MuestraSismica(fechaHoraMuestra=datetime(2025, 2, 21, 19, 20))
-muestraSismica3._detallesMuestraSismica = [
+muestraSismica3.detallesMuestraSismica = [
     detalleMuestraSismica_data[9],
     detalleMuestraSismica_data[10],
     detalleMuestraSismica_data[11],
 ]
 
-muestraSismica4 = MuestraSismica(fechaHoraMuestra=datetime(2025, 2, 21, 19, 25),)
-muestraSismica4._detallesMuestraSismica = [
+muestraSismica4 = MuestraSismica(
+    fechaHoraMuestra=datetime(2025, 2, 21, 19, 25),
+)
+muestraSismica4.detallesMuestraSismica = [
     detalleMuestraSismica_data[12],
     detalleMuestraSismica_data[13],
     detalleMuestraSismica_data[14],
@@ -41,7 +46,7 @@ muestraSismica4._detallesMuestraSismica = [
 
 # Son de SerieTemporal2
 muestraSismica5 = MuestraSismica(fechaHoraMuestra=datetime(2005, 7, 27, 2, 0))
-muestraSismica5._detallesMuestraSismica = [
+muestraSismica5.detallesMuestraSismica = [
     detalleMuestraSismica_data[15],
     detalleMuestraSismica_data[16],
     detalleMuestraSismica_data[17],
@@ -49,13 +54,13 @@ muestraSismica5._detallesMuestraSismica = [
 
 # Son de SerieTemporal3
 muestraSismica6 = MuestraSismica(fechaHoraMuestra=datetime(2025, 6, 20, 15, 0))
-muestraSismica6._detallesMuestraSismica = [
+muestraSismica6.detallesMuestraSismica = [
     detalleMuestraSismica_data[18],
     detalleMuestraSismica_data[19],
     detalleMuestraSismica_data[20],
 ]
 muestraSismica7 = MuestraSismica(fechaHoraMuestra=datetime(2025, 6, 20, 15, 5))
-muestraSismica7._detallesMuestraSismica = [
+muestraSismica7.detallesMuestraSismica = [
     detalleMuestraSismica_data[21],
     detalleMuestraSismica_data[22],
     detalleMuestraSismica_data[23],
@@ -63,7 +68,7 @@ muestraSismica7._detallesMuestraSismica = [
 
 # Son de SerieTemporal4
 muestraSismica8 = MuestraSismica(fechaHoraMuestra=datetime(2025, 6, 20, 15, 10))
-muestraSismica8._detallesMuestraSismica = [
+muestraSismica8.detallesMuestraSismica = [
     detalleMuestraSismica_data[24],
     detalleMuestraSismica_data[25],
     detalleMuestraSismica_data[26],
@@ -71,19 +76,19 @@ muestraSismica8._detallesMuestraSismica = [
 
 ## Son de SerieTemporal5
 muestraSismica9 = MuestraSismica(fechaHoraMuestra=datetime(2025, 6, 20, 15, 15))
-muestraSismica9._detallesMuestraSismica = [
+muestraSismica9.detallesMuestraSismica = [
     detalleMuestraSismica_data[27],
     detalleMuestraSismica_data[28],
     detalleMuestraSismica_data[29],
 ]
 muestraSismica10 = MuestraSismica(fechaHoraMuestra=datetime(2025, 6, 20, 15, 20))
-muestraSismica10._detallesMuestraSismica = [
+muestraSismica10.detallesMuestraSismica = [
     detalleMuestraSismica_data[30],
     detalleMuestraSismica_data[31],
     detalleMuestraSismica_data[32],
 ]
 
-muestraSismica_data = [
+muestraSismica_data: list[MuestraSismica] = [
     muestraSismica0,
     muestraSismica1,
     muestraSismica2,

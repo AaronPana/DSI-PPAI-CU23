@@ -2,7 +2,6 @@ from datetime import date
 
 
 class EstacionSismologica:
-
     def __init__(
         self,
         codigoEstacion: str,

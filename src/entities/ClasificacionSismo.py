@@ -1,5 +1,4 @@
 class ClasificacionSismo:
-
     def __init__(
         self, kmProfundidadDesde: int, kmProfundidadHasta: int, nombre: str
     ) -> None:
@@ -33,4 +32,4 @@ class ClasificacionSismo:
 
     @kmProfundidadHasta.setter
     def kmProfundidadHasta(self, nuevaKmProfundidadHasta: int) -> None:
-        self._nuevaKmProfundidadHasta = nuevaKmProfundidadHasta
+        self._nuevaKmProfundidadHasta: int = nuevaKmProfundidadHasta

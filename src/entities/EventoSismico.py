@@ -160,7 +160,9 @@ class EventoSismico:
     ) -> bool:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta: CambioEstado = self.crearCambioEstado(
+            nuevoEstado, responsable, fechaHoraInicio
+        )
         if respuesta:
             return True
         else:
@@ -173,7 +175,9 @@ class EventoSismico:
     ) -> bool:
         cambioEstadoActual: CambioEstado = self.buscarCambioEstado()
         cambioEstadoActual.fechaHoraFin = datetime.now()
-        respuesta = self.crearCambioEstado(nuevoEstado, responsable, fechaHoraInicio)
+        respuesta: CambioEstado = self.crearCambioEstado(
+            nuevoEstado, responsable, fechaHoraInicio
+        )
         if respuesta:
             return True
         else:

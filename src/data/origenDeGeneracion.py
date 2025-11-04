@@ -13,7 +13,7 @@ origenDeGeneracion2 = OrigenDeGeneracion(
     descripcion="Se induce como resultado de actividades mineras.",
 )
 
-origenDeGeneracion_data = [
+origenDeGeneracion_data: list[OrigenDeGeneracion] = [
     origenDeGeneracion0,
     origenDeGeneracion1,
     origenDeGeneracion2,

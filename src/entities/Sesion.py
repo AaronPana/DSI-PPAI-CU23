@@ -1,10 +1,10 @@
 from datetime import datetime
+
 from entities.Empleado import Empleado
 from entities.Usuario import Usuario
 
 
 class Sesion:
-
     def __init__(
         self,
         fechaHoraDesde: datetime,

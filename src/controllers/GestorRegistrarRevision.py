@@ -132,13 +132,10 @@ class GestorRegistrarRevision:
             self._eventoSismicoSeleccionado is not None
             and self._responsable is not None
         ):
-            respuesta: bool = self._eventoSismicoSeleccionado.rechazar(
+            return self._eventoSismicoSeleccionado.rechazar(
                 nuevoEstado, self._responsable, fechaHoraActual
             )
-        if respuesta:
-            return True
-        else:
-            return False
+        return False
 
     def buscarUsuario(self) -> Empleado:
         return self._sesion.obtenerUsuario()
@@ -146,7 +143,7 @@ class GestorRegistrarRevision:
     def getFechaHora(self) -> datetime:
         return datetime.now()
 
-    def buscarDetalleEventoSismico(self):
+    def buscarDetalleEventoSismico(self) -> None:
         if self._eventoSismicoSeleccionado is not None:
             self._datosEventoSismico = (
                 self._eventoSismicoSeleccionado.getDatosEventoSismico(self._sismografos)
