@@ -26,7 +26,7 @@ class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
             if detalleMuestraSismicaActual:
                 datosDetalleMuestraSismica = detalleMuestraSismicaActual.getDatos()
                 datosDetalles.append(datosDetalleMuestraSismica)
-            detalleMuestraSismicaActual.siguiente()
+            iteradorDetallesMuestraSismica.siguiente()
 
         infoMuestra: InfoMuestra = {
             "fechaHoraMuestra": self._fechaHoraMuestra.strftime("%d/%m/%Y %H:%M:%S"),
@@ -35,7 +35,7 @@ class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
         return infoMuestra
     
     # Modificado respecto al Patron Iterador
-    def crearIterador(listaElementos: list[DetalleMuestraSismica]) -> IteradorDetallesMuestraSismica:
+    def crearIterador(self, listaElementos: list[DetalleMuestraSismica]) -> IteradorDetallesMuestraSismica:
         return IteradorDetallesMuestraSismica(listaElementos)
 
     # Métodos de acceso (getters y setters)
