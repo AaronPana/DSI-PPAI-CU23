@@ -25,6 +25,9 @@ class IteradorSeriesTemporales(IIterador):
         if not self.haFinalizado():
             return self.listaSeriesTemporales[self.posicionActual]
         return None
+    
+    def comprobarFiltro(self):
+        pass
 
     def siguiente(self) -> None:
         self.posicionActual += 1

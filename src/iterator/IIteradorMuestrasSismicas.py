@@ -25,6 +25,9 @@ class IteradorMuestrasSismicas(IIterador):
         if not self.haFinalizado():
             return self.listaMuestrasSismicas[self.posicionActual]
         return None
+    
+    def comprobarFiltro(self):
+        pass
 
     def siguiente(self) -> None:
         self.posicionActual += 1
