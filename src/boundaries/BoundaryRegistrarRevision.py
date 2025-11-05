@@ -17,7 +17,7 @@ class BoundaryRegistrarRevision:
         # Botones
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sísmico")
-        self._btnCancelar = ft.ElevatedButton("Cancelar Modificación")
+        self._btnCancelar = ft.ElevatedButton("Cancelar Modificación", on_click=self.cancelarModificacion)
         self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar())
         self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa())
         self._btnRegistrarAccion = ft.ElevatedButton("Registrar", on_click=lambda e: self.tomarSeleccionRevision())
@@ -135,6 +135,7 @@ class BoundaryRegistrarRevision:
         )
 
         # Tabs
+        self._bloquear_tabs = False
         self._tabs = ft.Tabs(
             selected_index=0,
             tabs=[
@@ -183,6 +184,7 @@ class BoundaryRegistrarRevision:
                 ),
                     ],
             expand=True,
+            on_change=self.manejarCambioPestania,
         )
     
     # METODOS DE BOUNDARY
@@ -339,6 +341,7 @@ class BoundaryRegistrarRevision:
         self._page.update()
 
     def modificarEvento(self, e):
+        self._bloquear_tabs = True
         for campo in self._nombres_campos:
             self._campos_evento[campo].disabled = False
         self._formulario_edicion.visible = True
@@ -363,8 +366,24 @@ class BoundaryRegistrarRevision:
                 self._campos_evento[campo].value = valor
         self._tabs.tabs[2].visible = True
         self._tabs.selected_index = 2
-        self._page.scroll_to(offset=0, duration=150)
+        self._page.scroll_to(offset=0)
         self._page.update()
+    
+    def cancelarModificacion(self, e=None):
+        self._bloquear_tabs = False
+        for campo in self._nombres_campos:
+            self._campos_evento[campo].disabled = True
+        self._formulario_edicion.visible = False
+        self._tabs.tabs[2].visible = False
+        self._tabs.selected_index = 1
+        self._page.scroll_to(offset=0)
+        self._page.update()
+
+    def manejarCambioPestania(self, e):
+        if self._bloquear_tabs:
+            if self._tabs.selected_index != 2:
+                self._tabs.selected_index = 2
+                self._page.update()
 
     def solicitarAccionRevision(self):
         self._barra_acciones.visible = True
