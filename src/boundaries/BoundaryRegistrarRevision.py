@@ -17,7 +17,7 @@ class BoundaryRegistrarRevision:
         self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
         self._btnGuardar = ft.ElevatedButton("Guardar Evento Sísmico")
         self._btnCancelar = ft.ElevatedButton("Cancelar Modificación", on_click=self.cancelarModificacion)
-        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar())
+        self._btnCancelarCU = ft.ElevatedButton("X", bgcolor=ft.Colors.RED_900, color=ft.Colors.WHITE, on_click=lambda e: self.cancelar())
         self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa())
         self._btnRegistrarAccion = ft.ElevatedButton("Registrar", on_click=lambda e: self.tomarSeleccionRevision())
 
@@ -118,7 +118,34 @@ class BoundaryRegistrarRevision:
             padding=10,
         )
         # Barras de botones
-        self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
+        # self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
+        # Logo e Identidad visual
+        self._logo = ft.Image(
+            src="src/data/logo.png",
+            width=60,
+            height=60,
+            fit=ft.ImageFit.CONTAIN,
+        )
+
+        self._titulo_app = ft.Text(
+            "Red Sísmica Argentina",
+            size=22,
+            weight=ft.FontWeight.BOLD,
+            color=ft.Colors.BLUE_800,
+        )
+
+        # Barra superior con logo, título y botón cancelar
+        self._barra_superior = ft.Row(
+            controls=[
+                self._logo,
+                self._titulo_app,
+                ft.Container(expand=True),  # separador flexible
+                self._btnCancelarCU,
+            ],
+            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+        )
         self._barra_edicion = ft.Row(controls=[self._btnModificar], visible=False, spacing=10)
         self._barra_acciones = ft.Row(
             controls=[self._dropdownAccionRevision, self._btnRegistrarAccion, self._btnVisualizarMapa],
@@ -186,11 +213,24 @@ class BoundaryRegistrarRevision:
 
     def habilitarVentana(self):
         self._page.theme_mode = ft.ThemeMode.LIGHT
-        self._page.title = "Red Sísmica"
+        self._page.title = "Red Sísmica Argentina"
         self._page.window_maximized = True
         self._page.window_resizable = True
         self._page.padding = 20
-        self._page.add(self._tabs)
+        # self._page.add(self._tabs)
+        # Establecer ícono de ventana y estructura visual
+        self._page.window_icon = "src/data/logo.png"
+        # Agregar barra superior y tabs
+        self._page.add(
+            ft.Column(
+                [
+                    self._barra_superior,
+                    ft.Divider(thickness=2, color=ft.Colors.BLUE_100),
+                    self._tabs,
+                ],
+                spacing=10,
+            )
+        )
         self._gestorRegistrarRevision.seleccionDatosEventosSismicos()
 
     def mostrarDatosEventosSismicos(self, datos_eventos):

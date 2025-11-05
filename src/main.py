@@ -10,7 +10,7 @@ class Main:
     def pantalla_inicial(self, page: ft.Page):
         self.page = page
         self.page.theme_mode = ft.ThemeMode.LIGHT
-        self.page.title = "Red Sísmica"
+        self.page.title = "Red Sísmica Argentina"
         self.page.window.maximized = True
         self.page.scroll = ft.ScrollMode.AUTO
         self.page.window.resizable = True
