@@ -1,7 +1,6 @@
 import flet as ft
 from datetime import datetime
 
-
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controllers.GestorRegistrarRevision import GestorRegistrarRevision
@@ -32,7 +31,6 @@ class BoundaryRegistrarRevision:
             ],
             width=300,
         )
-
         # Imagen sismograma
         self._imagen_sismograma = ft.Image(
             key="mapaSismograma",
@@ -42,7 +40,6 @@ class BoundaryRegistrarRevision:
             height=250,
             fit=ft.ImageFit.CONTAIN,
         )
-
         # Contenedor sismograma
         self._contenedor_sismograma = ft.Container(
             content=ft.Column(
@@ -71,7 +68,6 @@ class BoundaryRegistrarRevision:
             alignment=ft.alignment.center,
             visible=False,
         )
-
         # Formulario de edición
         self._formulario_edicion = ft.Column(
             [
@@ -91,7 +87,6 @@ class BoundaryRegistrarRevision:
             ],
             visible=False,
         )
-
         # Grilla eventos no revisados
         self._eventosSismicosNoRevisados = []
         self._grillaEventosSismicosNoRevisados = ft.DataTable(
@@ -107,7 +102,6 @@ class BoundaryRegistrarRevision:
             heading_row_color=ft.Colors.BLUE_800,
             expand=True,
         )
-
         # Contenedor detalle evento seleccionado
         self._grillaEventoSismicoSeleccionado = ft.Container(
             content=ft.ListView(
@@ -123,7 +117,6 @@ class BoundaryRegistrarRevision:
             border_radius=10,
             padding=10,
         )
-
         # Barras de botones
         self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
         self._barra_edicion = ft.Row(controls=[self._btnModificar], visible=False, spacing=10)
@@ -133,7 +126,6 @@ class BoundaryRegistrarRevision:
             visible=False,
             spacing=10,
         )
-
         # Tabs
         self._bloquear_tabs = False
         self._tabs = ft.Tabs(
@@ -198,7 +190,6 @@ class BoundaryRegistrarRevision:
         self._page.window_maximized = True
         self._page.window_resizable = True
         self._page.padding = 20
-        # self._page.add(self._contenedor_principal)
         self._page.add(self._tabs)
         self._gestorRegistrarRevision.seleccionDatosEventosSismicos()
 
@@ -229,7 +220,7 @@ class BoundaryRegistrarRevision:
             self._grillaEventosSismicosNoRevisados.visible = False
             dlg = ft.AlertDialog(
                 modal=True,
-                title=ft.Text("❌ Error"),
+                title=ft.Text("Error"),
                 content=ft.Text(
                     "No hay sismos auto detectados que aún no han sido revisados."
                 ),
@@ -404,7 +395,7 @@ class BoundaryRegistrarRevision:
             if resultado:
                 dlg = ft.AlertDialog(
                     modal=True,
-                    title=ft.Text("✅ Éxito"),
+                    title=ft.Text("Éxito"),
                     content=ft.Text("La accion fue registrada con éxito"),
                     actions=[
                         ft.TextButton(
