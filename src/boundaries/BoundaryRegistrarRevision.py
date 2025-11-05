@@ -64,25 +64,25 @@ class BoundaryRegistrarRevision:
             height=300,
             bgcolor=ft.Colors.GREY_100,
             border_radius=10,
-            padding=15,
+            padding=10,
             alignment=ft.alignment.center,
             visible=False,
         )
         # Formulario de edición
-        self._formulario_edicion = ft.Column(
-            [
+        self._formulario_edicion = ft.Column([
+                ft.Container(height=20),
                 ft.Text(
-                    "Detalles del evento sísmico seleccionado",
+                    "Detalles del Evento Sísmico Seleccionado",
                     size=20,
                     weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.BLUE_800,
+                    text_align=ft.TextAlign.CENTER,
                 ),
-                ft.Row(
-                    [
-                        ft.Column(
-                            [self._campos_evento[campo] for campo in self._nombres_campos],
-                            expand=1,
-                        )
-                    ]
+                ft.Row([
+                    ft.Column(
+                        [self._campos_evento[campo] for campo in self._nombres_campos],
+                        expand=1,
+                    )]
                 ),
             ],
             visible=False,
@@ -99,7 +99,7 @@ class BoundaryRegistrarRevision:
                 ft.DataColumn(label=ft.Text("Magnitud")),
             ],
             rows=[],
-            heading_row_color=ft.Colors.BLUE_800,
+            heading_row_color=ft.Colors.BLUE_100,
             expand=True,
         )
         # Contenedor detalle evento seleccionado
@@ -158,14 +158,21 @@ class BoundaryRegistrarRevision:
         self._tabs = ft.Tabs(
             selected_index=0,
             tabs=[
-                ft.Tab(
-                    text="Eventos No Revisados",
-                    content=ft.Column(
-                        [
-                            ft.Text("Eventos Sísmicos No Revisados", size=18, weight=ft.FontWeight.BOLD),
-                            ft.Container(self._grillaEventosSismicosNoRevisados, height=200, alignment=ft.alignment.center),
+                ft.Tab(text="Eventos No Revisados",
+                    content=ft.Column([
+                            ft.Container(height=20),
+                            ft.Text(
+                                "Eventos Sísmicos No Revisados",
+                                size=20,
+                                weight=ft.FontWeight.BOLD,
+                                color=ft.Colors.BLUE_800,
+                                text_align=ft.TextAlign.CENTER,
+                            ),
+                            ft.Container(height=20),
+                            self._grillaEventosSismicosNoRevisados,
                         ],
-                        spacing=15,
+                        spacing=5,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     ),
                 ),
                 ft.Tab(
@@ -203,6 +210,7 @@ class BoundaryRegistrarRevision:
                 ),
                     ],
             expand=True,
+            padding=15,
             on_change=self.manejarCambioPestania,
         )
     
@@ -216,15 +224,10 @@ class BoundaryRegistrarRevision:
         self._page.title = "Red Sísmica Argentina"
         self._page.window_maximized = True
         self._page.window_resizable = True
-        self._page.padding = 20
-        # self._page.add(self._tabs)
-        # Establecer ícono de ventana y estructura visual
+        self._page.padding = 10
         self._page.window_icon = "src/data/logo.png"
-        # Agregar barra superior y tabs
         self._page.add(
-            ft.Column(
-                [
-                    self._barra_superior,
+            ft.Column([self._barra_superior,
                     ft.Divider(thickness=2, color=ft.Colors.BLUE_100),
                     self._tabs,
                 ],
@@ -248,9 +251,7 @@ class BoundaryRegistrarRevision:
                         ft.DataCell(ft.Text(str(evento["valorMagnitud"]))),
                     ],
                     selected=False,
-                    on_select_changed=lambda selected, i=index: self.seleccionEventoSismico(
-                        i, selected
-                    ),
+                    on_select_changed=lambda selected, i=index: self.seleccionEventoSismico(i, selected),
                 )
                 filas.append(fila)
             self._grillaEventosSismicosNoRevisados.rows = filas
@@ -269,7 +270,6 @@ class BoundaryRegistrarRevision:
                 ],
             )
             self._page.open(dlg)
-
         self._page.update()
 
     def seleccionEventoSismico(self, index, selected):
