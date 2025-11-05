@@ -5,12 +5,10 @@ from datetime import datetime
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controllers.GestorRegistrarRevision import GestorRegistrarRevision
-
-        # Instanciamos el gestor con referencia a esta boundary
         self._gestorRegistrarRevision: GestorRegistrarRevision = GestorRegistrarRevision(self, datetime.now())
         self._page: ft.Page = page
 
-        # ATRIBUTOS
+        # Atributos
         self._campos_evento = {}
         self._nombres_campos = ["Fecha", "Hora", "Latitud", "Longitud", "Magnitud"]
         for campo in self._nombres_campos:
@@ -181,7 +179,7 @@ class BoundaryRegistrarRevision:
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         expand=True,
                     ),
-                    visible=False,  # inicialmente oculto
+                    visible=False,
                 ),
                     ],
             expand=True,
@@ -243,7 +241,6 @@ class BoundaryRegistrarRevision:
 
     def seleccionEventoSismico(self, index, selected):
         if selected:
-            # Seleccionar solo la fila marcada
             for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
                 row.selected = i == index
 
@@ -262,46 +259,9 @@ class BoundaryRegistrarRevision:
                 "Longitud": self._campos_evento["Longitud"].value,
                 "Magnitud": self._campos_evento["Magnitud"].value,
             }
-
-            # Llamar al gestor para traer datos extendidos
             self._gestorRegistrarRevision.seleccionEventoSismico(evento_dict)
-
-            # Cambiar al tab de detalle
             self._tabs.selected_index = 1
-
             self._page.update()
-
-
-    # def seleccionEventoSismico(self, index, selected):
-    #     if selected:
-    #         for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
-    #             row.selected = i == index
-    #         evento_dict = self._eventosSismicosNoRevisados[index]
-
-    #         fecha_hora = evento_dict["fechaHoraOcurrencia"].split()
-    #         self._campos_evento["Fecha"].value = (
-    #             fecha_hora[0] if len(fecha_hora) > 0 else ""
-    #         )
-    #         self._campos_evento["Hora"].value = (
-    #             fecha_hora[1] if len(fecha_hora) > 1 else ""
-    #         )
-    #         self._campos_evento["Latitud"].value = str(evento_dict["latitudEpicentro"])
-    #         self._campos_evento["Longitud"].value = str(
-    #             evento_dict["longitudEpicentro"]
-    #         )
-    #         self._campos_evento["Magnitud"].value = str(evento_dict["valorMagnitud"])
-
-    #         self.evento_original = {
-    #             "Fecha": self._campos_evento["Fecha"].value,
-    #             "Hora": self._campos_evento["Hora"].value,
-    #             "Latitud": self._campos_evento["Latitud"].value,
-    #             "Longitud": self._campos_evento["Longitud"].value,
-    #             "Magnitud": self._campos_evento["Magnitud"].value,
-    #         }
-
-    #         self._formulario_edicion.visible = False
-    #         self._gestorRegistrarRevision.seleccionEventoSismico(evento_dict)
-    #         self._page.update()
 
     def mostrarDatosEventoSismico(self, evento_extendido):
         secciones_estaciones = []
@@ -379,12 +339,9 @@ class BoundaryRegistrarRevision:
         self._page.update()
 
     def modificarEvento(self, e):
-        # Habilitar edición de campos
         for campo in self._nombres_campos:
             self._campos_evento[campo].disabled = False
         self._formulario_edicion.visible = True
-
-        # Buscar el evento seleccionado
         index_seleccionado = next(
             (
                 i
@@ -393,7 +350,6 @@ class BoundaryRegistrarRevision:
             ),
             None,
         )
-
         if index_seleccionado is not None:
             evento = self._eventosSismicosNoRevisados[index_seleccionado]
             self.evento_original = {
@@ -403,43 +359,12 @@ class BoundaryRegistrarRevision:
                 "Longitud": evento["longitudEpicentro"],
                 "Magnitud": evento["valorMagnitud"],
             }
-
             for campo, valor in self.evento_original.items():
                 self._campos_evento[campo].value = valor
-
-        # 🔹 Mostrar el tab de edición
         self._tabs.tabs[2].visible = True
-        self._tabs.selected_index = 2  # cambiar a "Editar Evento"
+        self._tabs.selected_index = 2
+        self._page.scroll_to(offset=0, duration=150)
         self._page.update()
-
-
-    # def modificarEvento(self, e):
-    #     self._formulario_edicion.visible = True
-    #     for campo in self._nombres_campos:
-    #         self._campos_evento[campo].disabled = False
-    #     self._barra_edicion.visible = True
-    #     index_seleccionado = next(
-    #         (
-    #             i
-    #             for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows)
-    #             if row.selected
-    #         ),
-    #         None,
-    #     )
-    #     if index_seleccionado is not None:
-    #         evento = self._eventosSismicosNoRevisados[index_seleccionado]
-    #         self.evento_original = {
-    #             "Fecha": evento["fechaHoraOcurrencia"].split()[0],
-    #             "Hora": evento["fechaHoraOcurrencia"].split()[1],
-    #             "Latitud": evento["latitudEpicentro"],
-    #             "Longitud": evento["longitudEpicentro"],
-    #             "Magnitud": evento["valorMagnitud"],
-    #         }
-
-    #         for campo, valor in self.evento_original.items():
-    #             self._campos_evento[campo].value = valor
-
-    #     self._page.update()
 
     def solicitarAccionRevision(self):
         self._barra_acciones.visible = True
