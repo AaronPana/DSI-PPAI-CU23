@@ -116,32 +116,19 @@ class BoundaryRegistrarRevision:
                 controls=[],
                 expand=True,
                 spacing=10,
-                auto_scroll=False,  # no se auto-desplaza, solo muestra scroll si hay overflow
+                auto_scroll=False,
             ),
             visible=False,
             width=950,
-            height=600,  # altura fija con scroll dentro
+            height=600,
             bgcolor=ft.Colors.GREY_100,
             border_radius=10,
             padding=10,
         )
-        # self._grillaEventoSismicoSeleccionado = ft.Container(
-        #     content=ft.Column(
-        #         controls=[],
-        #         expand=True,
-        #         spacing=10
-        #     ),
-        #     visible=False,
-        #     width=950,
-        #     height=600,
-        #     bgcolor=ft.Colors.GREY_100,
-        #     border_radius=10,
-        #     padding=10,
-        # )
 
         # Barras de botones
         self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
-        self._barra_edicion = ft.Row(controls=[self._btnModificar, self._btnGuardar, self._btnCancelar], visible=False, spacing=10)
+        self._barra_edicion = ft.Row(controls=[self._btnModificar], visible=False, spacing=10)
         self._barra_acciones = ft.Row(
             controls=[self._dropdownAccionRevision, self._btnRegistrarAccion, self._btnVisualizarMapa],
             alignment=ft.MainAxisAlignment.CENTER,
@@ -179,7 +166,24 @@ class BoundaryRegistrarRevision:
                         expand=True,
                     ),
                 ),
-            ],
+                ft.Tab(
+                    text="Modificar Evento Sismico",
+                    content=ft.Column(
+                        [
+                            self._formulario_edicion,
+                            ft.Row(
+                                [self._btnGuardar, self._btnCancelar],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                                spacing=20,
+                            ),
+                        ],
+                        spacing=20,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True,
+                    ),
+                    visible=False,  # inicialmente oculto
+                ),
+                    ],
             expand=True,
         )
     
@@ -375,10 +379,12 @@ class BoundaryRegistrarRevision:
         self._page.update()
 
     def modificarEvento(self, e):
-        self._formulario_edicion.visible = True
+        # Habilitar edición de campos
         for campo in self._nombres_campos:
             self._campos_evento[campo].disabled = False
-        self._barra_edicion.visible = True
+        self._formulario_edicion.visible = True
+
+        # Buscar el evento seleccionado
         index_seleccionado = next(
             (
                 i
@@ -387,6 +393,7 @@ class BoundaryRegistrarRevision:
             ),
             None,
         )
+
         if index_seleccionado is not None:
             evento = self._eventosSismicosNoRevisados[index_seleccionado]
             self.evento_original = {
@@ -400,7 +407,39 @@ class BoundaryRegistrarRevision:
             for campo, valor in self.evento_original.items():
                 self._campos_evento[campo].value = valor
 
+        # 🔹 Mostrar el tab de edición
+        self._tabs.tabs[2].visible = True
+        self._tabs.selected_index = 2  # cambiar a "Editar Evento"
         self._page.update()
+
+
+    # def modificarEvento(self, e):
+    #     self._formulario_edicion.visible = True
+    #     for campo in self._nombres_campos:
+    #         self._campos_evento[campo].disabled = False
+    #     self._barra_edicion.visible = True
+    #     index_seleccionado = next(
+    #         (
+    #             i
+    #             for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows)
+    #             if row.selected
+    #         ),
+    #         None,
+    #     )
+    #     if index_seleccionado is not None:
+    #         evento = self._eventosSismicosNoRevisados[index_seleccionado]
+    #         self.evento_original = {
+    #             "Fecha": evento["fechaHoraOcurrencia"].split()[0],
+    #             "Hora": evento["fechaHoraOcurrencia"].split()[1],
+    #             "Latitud": evento["latitudEpicentro"],
+    #             "Longitud": evento["longitudEpicentro"],
+    #             "Magnitud": evento["valorMagnitud"],
+    #         }
+
+    #         for campo, valor in self.evento_original.items():
+    #             self._campos_evento[campo].value = valor
+
+    #     self._page.update()
 
     def solicitarAccionRevision(self):
         self._barra_acciones.visible = True
