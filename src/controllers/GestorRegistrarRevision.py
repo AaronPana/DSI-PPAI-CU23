@@ -68,8 +68,8 @@ class GestorRegistrarRevision(IAgregado): #Hereda de IAgregado para el Patron It
         iteradorEventosSismicos.primero()
 
         while not iteradorEventosSismicos.haFinalizado():
+            evento: EventoSismico = iteradorEventosSismicos.elementoActual()
             if iteradorEventosSismicos.comprobarFiltro():
-                evento: EventoSismico = iteradorEventosSismicos.elementoActual()
                 if evento is not None:
                     self._eventosSismicosNoRevisados.append(evento)
                     self._datosEventosSismicosNoRevisados.append(evento.getDatos())

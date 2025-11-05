@@ -15,7 +15,7 @@ InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 
 
-class SerieTemporal(IAgregado):  # Hereda de IAgregado para el Patron Iterator
+class SerieTemporal(IAgregado):
     def __init__(
         self,
         condicionAlarma: bool,
@@ -36,9 +36,9 @@ class SerieTemporal(IAgregado):  # Hereda de IAgregado para el Patron Iterator
     # Modificado respecto al Patron Iterador
     def getDatos(self, sismografos: list["Sismografo"]) -> InfoSerieTemporal:
         datosMuestras: list[InfoMuestra] = []
-        sismografo: Sismografo = self.esMiSismografo(sismografos) #FALTA ESTO EN EL DIAGRAMA DE SECUENCIA
+        sismografo: Sismografo = self.esMiSismografo(sismografos)
 
-        iteradorMuestrasSismicas: IteradorMuestrasSismicas = self.crearIterador(self._muestrasSismicas) #ESTO SE LLAMA NEW, CAMBIAR NOMBRE POR crearIterador()
+        iteradorMuestrasSismicas: IteradorMuestrasSismicas = self.crearIterador(self._muestrasSismicas)
         iteradorMuestrasSismicas.primero()
         while not iteradorMuestrasSismicas.haFinalizado():
             muestraSismicaActual: MuestraSismica  = iteradorMuestrasSismicas.elementoActual()

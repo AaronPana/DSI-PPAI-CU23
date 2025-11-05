@@ -17,7 +17,7 @@ class IteradorEventosSismicos(IIterador):
         return None
 
     def comprobarFiltro(self) -> bool:
-        evento = self.elementoActual()
+        evento: EventoSismico = self.elementoActual()
         if evento is None:
             return False
         return evento.esAutoDetectado() or evento.esPendienteRevision()
