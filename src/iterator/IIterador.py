@@ -1,12 +1,4 @@
 from abc import ABC, abstractmethod
-
-# + new(listaElementos: object[]): Iterador
-# + primero(): None
-# + haFinalizado(): bool
-# + elementoActual(): object
-# + comprobarFiltro(): bool
-# + siguiente(): None
-
 class IIterador(ABC):
     @abstractmethod
     def primero(self) -> None:

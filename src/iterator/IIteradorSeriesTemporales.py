@@ -1,18 +1,8 @@
-from .IIterador import IIterador
-from typing import List
+from iterator.IIterador import IIterador
 from entities.SerieTemporal import SerieTemporal
-
-# - listaSeriesTemporales: list[SerieTemporal]
-# - posicionActual: int
-# + new(listaElementos: list[object]): IIterador
-# + primero(): None
-# + haFinalizado(): bool
-# + elementoActual(): object
-# + siguiente(): None
-
 class IteradorSeriesTemporales(IIterador):
-    def __init__(self, listaElementos: List[SerieTemporal]):
-        self.listaSeriesTemporales: List[SerieTemporal] = listaElementos
+    def __init__(self, listaElementos: list[SerieTemporal]):
+        self.listaSeriesTemporales: list[SerieTemporal] = listaElementos
         self.posicionActual = 0
 
     def primero(self) -> None:

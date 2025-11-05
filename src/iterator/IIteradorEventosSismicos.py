@@ -1,20 +1,8 @@
-from .IIterador import IIterador
-from typing import List
+from iterator.IIterador import IIterador
 from entities.EventoSismico import EventoSismico
-
-# IIteradorEventosSismicos
-# - listaEventosSismicos: EventoSismico[]
-# - posicionActual: int
-# + new(listaElementos: object[]): Iterador
-# + primero(): None
-# + haFinalizado(): bool
-# + elementoActual(): object
-# + comprobarFiltro(): bool
-# + siguiente(): None
-
 class IteradorEventosSismicos(IIterador):
-    def __init__(self, listaElementos: List[EventoSismico]):
-        self.listaEventosSismicos:List[EventoSismico] = listaElementos
+    def __init__(self, listaElementos: list[EventoSismico]):
+        self.listaEventosSismicos:list[EventoSismico] = listaElementos
         self.posicionActual = 0
 
     def primero(self) -> None:
