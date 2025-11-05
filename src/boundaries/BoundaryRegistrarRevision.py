@@ -6,9 +6,8 @@ class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controllers.GestorRegistrarRevision import GestorRegistrarRevision
 
-        self._gestorRegistrarRevision: GestorRegistrarRevision = (
-            GestorRegistrarRevision(self, datetime.now())
-        )
+        # Instanciamos el gestor con referencia a esta boundary
+        self._gestorRegistrarRevision: GestorRegistrarRevision = GestorRegistrarRevision(self, datetime.now())
         self._page: ft.Page = page
 
         # ATRIBUTOS
@@ -17,21 +16,15 @@ class BoundaryRegistrarRevision:
         for campo in self._nombres_campos:
             self._campos_evento[campo] = ft.TextField(label=campo, disabled=True)
 
-        self._btnModificar = ft.ElevatedButton(
-            "Modificar", on_click=self.modificarEvento
-        )
-        self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico")
-        self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion")
-        self._btnCancelarCU = ft.ElevatedButton(
-            "Cancelar", on_click=lambda e: self.cancelar()
-        )
-        self._btnVisualizarMapa = ft.ElevatedButton(
-            "Ver mapa", on_click=lambda e: self.mostrarMapa()
-        )
-        self._btnRegistrarAccion = ft.ElevatedButton(
-            text="Registrar", on_click=lambda e: self.tomarSeleccionRevision()
-        )
+        # Botones
+        self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
+        self._btnGuardar = ft.ElevatedButton("Guardar Evento Sísmico")
+        self._btnCancelar = ft.ElevatedButton("Cancelar Modificación")
+        self._btnCancelarCU = ft.ElevatedButton("Cancelar", on_click=lambda e: self.cancelar())
+        self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa())
+        self._btnRegistrarAccion = ft.ElevatedButton("Registrar", on_click=lambda e: self.tomarSeleccionRevision())
 
+        # Dropdown acción de revisión
         self._dropdownAccionRevision = ft.Dropdown(
             label="Acción de revisión",
             options=[
@@ -42,6 +35,7 @@ class BoundaryRegistrarRevision:
             width=300,
         )
 
+        # Imagen sismograma
         self._imagen_sismograma = ft.Image(
             key="mapaSismograma",
             src="../data/sismograma.png",
@@ -51,6 +45,7 @@ class BoundaryRegistrarRevision:
             fit=ft.ImageFit.CONTAIN,
         )
 
+        # Contenedor sismograma
         self._contenedor_sismograma = ft.Container(
             content=ft.Column(
                 [
@@ -79,6 +74,7 @@ class BoundaryRegistrarRevision:
             visible=False,
         )
 
+        # Formulario de edición
         self._formulario_edicion = ft.Column(
             [
                 ft.Text(
@@ -89,12 +85,7 @@ class BoundaryRegistrarRevision:
                 ft.Row(
                     [
                         ft.Column(
-                            [
-                                *[
-                                    self._campos_evento[campo]
-                                    for campo in self._nombres_campos
-                                ]
-                            ],
+                            [self._campos_evento[campo] for campo in self._nombres_campos],
                             expand=1,
                         )
                     ]
@@ -103,6 +94,7 @@ class BoundaryRegistrarRevision:
             visible=False,
         )
 
+        # Grilla eventos no revisados
         self._eventosSismicosNoRevisados = []
         self._grillaEventosSismicosNoRevisados = ft.DataTable(
             columns=[
@@ -118,80 +110,46 @@ class BoundaryRegistrarRevision:
             expand=True,
         )
 
+        # Contenedor detalle evento seleccionado
         self._grillaEventoSismicoSeleccionado = ft.Container(
             content=ft.ListView(
-                controls=[], expand=True, spacing=10, auto_scroll=False
+                controls=[],
+                expand=True,
+                spacing=10,
+                auto_scroll=False,  # no se auto-desplaza, solo muestra scroll si hay overflow
             ),
             visible=False,
             width=950,
-            height=280,
+            height=600,  # altura fija con scroll dentro
             bgcolor=ft.Colors.GREY_100,
             border_radius=10,
             padding=10,
         )
+        # self._grillaEventoSismicoSeleccionado = ft.Container(
+        #     content=ft.Column(
+        #         controls=[],
+        #         expand=True,
+        #         spacing=10
+        #     ),
+        #     visible=False,
+        #     width=950,
+        #     height=600,
+        #     bgcolor=ft.Colors.GREY_100,
+        #     border_radius=10,
+        #     padding=10,
+        # )
 
-        self._barra_superior = ft.Row(
-            controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END
-        )
-
-        self._barra_edicion = ft.Row(
-            controls=[self._btnModificar, self._btnGuardar, self._btnCancelar],
-            visible=False,
-            spacing=10,
-        )
-
+        # Barras de botones
+        self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
+        self._barra_edicion = ft.Row(controls=[self._btnModificar, self._btnGuardar, self._btnCancelar], visible=False, spacing=10)
         self._barra_acciones = ft.Row(
-            controls=[
-                self._dropdownAccionRevision,
-                self._btnRegistrarAccion,
-                self._btnVisualizarMapa,
-            ],
+            controls=[self._dropdownAccionRevision, self._btnRegistrarAccion, self._btnVisualizarMapa],
             alignment=ft.MainAxisAlignment.CENTER,
             visible=False,
             spacing=10,
         )
 
-        self._contenedor_principal = ft.Column(
-            controls=[
-                self._barra_superior,
-                ft.Text(
-                    "Eventos Sísmicos No Revisados", size=18, weight=ft.FontWeight.BOLD
-                ),
-                ft.Container(
-                    self._grillaEventosSismicosNoRevisados,
-                    height=200,
-                    alignment=ft.alignment.center,
-                ),
-                ft.Divider(),
-                ft.Text(
-                    "Detalle del Evento Seleccionado",
-                    size=18,
-                    weight=ft.FontWeight.BOLD,
-                    visible=self._grillaEventoSismicoSeleccionado.visible,
-                ),
-                self._grillaEventoSismicoSeleccionado,
-                ft.Container(
-                    ft.Row(
-                        [
-                            self._contenedor_sismograma,
-                            ft.Column(
-                                [self._formulario_edicion, self._barra_edicion],
-                                expand=True,
-                            ),
-                        ],
-                        spacing=20,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-                    ),
-                    margin=ft.margin.symmetric(vertical=25, horizontal=150),
-                ),
-                self._barra_acciones,
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=15,
-            expand=True,
-        )
-
-        # Crear Tabs después de definir todos los controles
+        # Tabs
         self._tabs = ft.Tabs(
             selected_index=0,
             tabs=[
@@ -199,44 +157,32 @@ class BoundaryRegistrarRevision:
                     text="Eventos No Revisados",
                     content=ft.Column(
                         [
-                            ft.Text(
-                                "Eventos Sísmicos No Revisados",
-                                size=18,
-                                weight=ft.FontWeight.BOLD
-                            ),
-                            ft.Container(
-                                self._grillaEventosSismicosNoRevisados,
-                                height=200,
-                                alignment=ft.alignment.center
-                            )
+                            ft.Text("Eventos Sísmicos No Revisados", size=18, weight=ft.FontWeight.BOLD),
+                            ft.Container(self._grillaEventosSismicosNoRevisados, height=200, alignment=ft.alignment.center),
                         ],
-                        spacing=15
-                    )
+                        spacing=15,
+                    ),
                 ),
                 ft.Tab(
                     text="Detalle del Evento",
-                    content=ft.Column(
-                        [
-                            ft.Row(
-                                [
-                                    self._contenedor_sismograma,
-                                    ft.Column([self._formulario_edicion, self._barra_edicion], expand=True),
-                                ],
-                                spacing=20,
-                                vertical_alignment=ft.CrossAxisAlignment.CENTER
-                            ),
-                            self._barra_acciones,
+                    content=ft.ListView(
+                        controls=[
                             self._grillaEventoSismicoSeleccionado,
+                            ft.Divider(),
+                            self._contenedor_sismograma,
+                            self._barra_edicion,
+                            ft.Divider(),
+                            self._barra_acciones,
                         ],
-                        spacing=15
-                    )
+                        spacing=20,
+                        padding=ft.padding.all(10),
+                        expand=True,
+                    ),
                 ),
             ],
-            expand=True
+            expand=True,
         )
-
-
-
+    
     # METODOS DE BOUNDARY
 
     def registrarRevisionManual(self) -> None:
@@ -246,7 +192,6 @@ class BoundaryRegistrarRevision:
         self._page.theme_mode = ft.ThemeMode.LIGHT
         self._page.title = "Red Sísmica"
         self._page.window_maximized = True
-        self._page.scroll = ft.ScrollMode.AUTO
         self._page.window_resizable = True
         self._page.padding = 20
         # self._page.add(self._contenedor_principal)
@@ -396,7 +341,8 @@ class BoundaryRegistrarRevision:
                     border_radius=10,
                 )
             )
-        self._grillaEventoSismicoSeleccionado.content.controls = [
+        self._grillaEventoSismicoSeleccionado.content.controls.clear()
+        self._grillaEventoSismicoSeleccionado.content.controls.extend([
             ft.Text(
                 "Información Extendida del Evento", size=18, weight=ft.FontWeight.BOLD
             ),
@@ -405,7 +351,7 @@ class BoundaryRegistrarRevision:
             ft.Text(f"Clasificación: {evento_extendido['clasificacion']}"),
             ft.Divider(),
             *secciones_estaciones,
-        ]
+        ])
         self._grillaEventoSismicoSeleccionado.visible = True
         self._page.update()
         self.habilitarOpcionVisualizarMapa(True)
