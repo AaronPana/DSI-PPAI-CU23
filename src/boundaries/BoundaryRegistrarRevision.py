@@ -1,37 +1,27 @@
 import flet as ft
 from datetime import datetime
 
-
 class BoundaryRegistrarRevision:
     def __init__(self, page: ft.Page) -> None:
         from controllers.GestorRegistrarRevision import GestorRegistrarRevision
-
-        self._gestorRegistrarRevision: GestorRegistrarRevision = (
-            GestorRegistrarRevision(self, datetime.now())
-        )
+        self._gestorRegistrarRevision: GestorRegistrarRevision = GestorRegistrarRevision(self, datetime.now())
         self._page: ft.Page = page
 
-        # ATRIBUTOS
+        # Atributos
         self._campos_evento = {}
         self._nombres_campos = ["Fecha", "Hora", "Latitud", "Longitud", "Magnitud"]
         for campo in self._nombres_campos:
             self._campos_evento[campo] = ft.TextField(label=campo, disabled=True)
 
-        self._btnModificar = ft.ElevatedButton(
-            "Modificar", on_click=self.modificarEvento
-        )
-        self._btnGuardar = ft.ElevatedButton("Guardar Evento Sismico")
-        self._btnCancelar = ft.ElevatedButton("Cancelar Modificacion")
-        self._btnCancelarCU = ft.ElevatedButton(
-            "Cancelar", on_click=lambda e: self.cancelar()
-        )
-        self._btnVisualizarMapa = ft.ElevatedButton(
-            "Ver mapa", on_click=lambda e: self.mostrarMapa()
-        )
-        self._btnRegistrarAccion = ft.ElevatedButton(
-            text="Registrar", on_click=lambda e: self.tomarSeleccionRevision()
-        )
+        # Botones
+        self._btnModificar = ft.ElevatedButton("Modificar", on_click=self.modificarEvento)
+        self._btnGuardar = ft.ElevatedButton("Guardar Evento Sísmico")
+        self._btnCancelar = ft.ElevatedButton("Cancelar Modificación", on_click=self.cancelarModificacion)
+        self._btnCancelarCU = ft.ElevatedButton("X", bgcolor=ft.Colors.RED_900, color=ft.Colors.WHITE, on_click=lambda e: self.cancelar())
+        self._btnVisualizarMapa = ft.ElevatedButton("Ver mapa", on_click=lambda e: self.mostrarMapa())
+        self._btnRegistrarAccion = ft.ElevatedButton("Registrar", on_click=lambda e: self.tomarSeleccionRevision())
 
+        # Dropdown acción de revisión
         self._dropdownAccionRevision = ft.Dropdown(
             label="Acción de revisión",
             options=[
@@ -41,7 +31,7 @@ class BoundaryRegistrarRevision:
             ],
             width=300,
         )
-
+        # Imagen sismograma
         self._imagen_sismograma = ft.Image(
             key="mapaSismograma",
             src="../data/sismograma.png",
@@ -50,7 +40,7 @@ class BoundaryRegistrarRevision:
             height=250,
             fit=ft.ImageFit.CONTAIN,
         )
-
+        # Contenedor sismograma
         self._contenedor_sismograma = ft.Container(
             content=ft.Column(
                 [
@@ -74,35 +64,30 @@ class BoundaryRegistrarRevision:
             height=300,
             bgcolor=ft.Colors.GREY_100,
             border_radius=10,
-            padding=15,
+            padding=10,
             alignment=ft.alignment.center,
             visible=False,
         )
-
-        self._formulario_edicion = ft.Column(
-            [
+        # Formulario de edición
+        self._formulario_edicion = ft.Column([
+                ft.Container(height=20),
                 ft.Text(
-                    "Detalles del evento sísmico seleccionado",
+                    "Detalles del Evento Sísmico Seleccionado",
                     size=20,
                     weight=ft.FontWeight.BOLD,
+                    color=ft.Colors.BLUE_800,
+                    text_align=ft.TextAlign.CENTER,
                 ),
-                ft.Row(
-                    [
-                        ft.Column(
-                            [
-                                *[
-                                    self._campos_evento[campo]
-                                    for campo in self._nombres_campos
-                                ]
-                            ],
-                            expand=1,
-                        )
-                    ]
+                ft.Row([
+                    ft.Column(
+                        [self._campos_evento[campo] for campo in self._nombres_campos],
+                        expand=1,
+                    )]
                 ),
             ],
             visible=False,
         )
-
+        # Grilla eventos no revisados
         self._eventosSismicosNoRevisados = []
         self._grillaEventosSismicosNoRevisados = ft.DataTable(
             columns=[
@@ -114,83 +99,121 @@ class BoundaryRegistrarRevision:
                 ft.DataColumn(label=ft.Text("Magnitud")),
             ],
             rows=[],
-            heading_row_color=ft.Colors.BLUE_800,
+            heading_row_color=ft.Colors.BLUE_100,
             expand=True,
         )
-
+        # Contenedor detalle evento seleccionado
         self._grillaEventoSismicoSeleccionado = ft.Container(
             content=ft.ListView(
-                controls=[], expand=True, spacing=10, auto_scroll=False
+                controls=[],
+                expand=True,
+                spacing=10,
+                auto_scroll=False,
             ),
             visible=False,
             width=950,
-            height=280,
+            height=600,
             bgcolor=ft.Colors.GREY_100,
             border_radius=10,
             padding=10,
         )
+        # Barras de botones
+        # self._barra_superior = ft.Row(controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END)
+        # Logo e Identidad visual
+        self._logo = ft.Image(
+            src="src/data/logo.png",
+            width=60,
+            height=60,
+            fit=ft.ImageFit.CONTAIN,
+        )
 
+        self._titulo_app = ft.Text(
+            "Red Sísmica Argentina",
+            size=22,
+            weight=ft.FontWeight.BOLD,
+            color=ft.Colors.BLUE_800,
+        )
+
+        # Barra superior con logo, título y botón cancelar
         self._barra_superior = ft.Row(
-            controls=[self._btnCancelarCU], alignment=ft.MainAxisAlignment.END
-        )
-
-        self._barra_edicion = ft.Row(
-            controls=[self._btnModificar, self._btnGuardar, self._btnCancelar],
-            visible=False,
-            spacing=10,
-        )
-
-        self._barra_acciones = ft.Row(
             controls=[
-                self._dropdownAccionRevision,
-                self._btnRegistrarAccion,
-                self._btnVisualizarMapa,
+                self._logo,
+                self._titulo_app,
+                ft.Container(expand=True),  # separador flexible
+                self._btnCancelarCU,
             ],
+            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=15,
+        )
+        self._barra_edicion = ft.Row(controls=[self._btnModificar], visible=False, spacing=10)
+        self._barra_acciones = ft.Row(
+            controls=[self._dropdownAccionRevision, self._btnRegistrarAccion, self._btnVisualizarMapa],
             alignment=ft.MainAxisAlignment.CENTER,
             visible=False,
             spacing=10,
         )
-
-        self._contenedor_principal = ft.Column(
-            controls=[
-                self._barra_superior,
-                ft.Text(
-                    "Eventos Sísmicos No Revisados", size=18, weight=ft.FontWeight.BOLD
+        # Tabs
+        self._bloquear_tabs = False
+        self._tabs = ft.Tabs(
+            selected_index=0,
+            tabs=[
+                ft.Tab(text="Eventos No Revisados",
+                    content=ft.Column([
+                            ft.Container(height=20),
+                            ft.Text(
+                                "Eventos Sísmicos No Revisados",
+                                size=20,
+                                weight=ft.FontWeight.BOLD,
+                                color=ft.Colors.BLUE_800,
+                                text_align=ft.TextAlign.CENTER,
+                            ),
+                            ft.Container(height=20),
+                            self._grillaEventosSismicosNoRevisados,
+                        ],
+                        spacing=5,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    ),
                 ),
-                ft.Container(
-                    self._grillaEventosSismicosNoRevisados,
-                    height=200,
-                    alignment=ft.alignment.center,
-                ),
-                ft.Divider(),
-                ft.Text(
-                    "Detalle del Evento Seleccionado",
-                    size=18,
-                    weight=ft.FontWeight.BOLD,
-                    visible=self._grillaEventoSismicoSeleccionado.visible,
-                ),
-                self._grillaEventoSismicoSeleccionado,
-                ft.Container(
-                    ft.Row(
-                        [
+                ft.Tab(
+                    text="Detalle del Evento",
+                    content=ft.ListView(
+                        controls=[
+                            self._grillaEventoSismicoSeleccionado,
+                            ft.Divider(),
                             self._contenedor_sismograma,
-                            ft.Column(
-                                [self._formulario_edicion, self._barra_edicion],
-                                expand=True,
+                            self._barra_edicion,
+                            ft.Divider(),
+                            self._barra_acciones,
+                        ],
+                        spacing=20,
+                        padding=ft.padding.all(10),
+                        expand=True,
+                    ),
+                ),
+                ft.Tab(
+                    text="Modificar Evento Sismico",
+                    content=ft.Column(
+                        [
+                            self._formulario_edicion,
+                            ft.Row(
+                                [self._btnGuardar, self._btnCancelar],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                                spacing=20,
                             ),
                         ],
                         spacing=20,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True,
                     ),
-                    margin=ft.margin.symmetric(vertical=25, horizontal=150),
+                    visible=False,
                 ),
-                self._barra_acciones,
-            ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=15,
+                    ],
             expand=True,
+            padding=15,
+            on_change=self.manejarCambioPestania,
         )
-
+    
     # METODOS DE BOUNDARY
 
     def registrarRevisionManual(self) -> None:
@@ -198,12 +221,19 @@ class BoundaryRegistrarRevision:
 
     def habilitarVentana(self):
         self._page.theme_mode = ft.ThemeMode.LIGHT
-        self._page.title = "Red Sísmica"
+        self._page.title = "Red Sísmica Argentina"
         self._page.window_maximized = True
-        self._page.scroll = ft.ScrollMode.AUTO
         self._page.window_resizable = True
-        self._page.padding = 20
-        self._page.add(self._contenedor_principal)
+        self._page.padding = 10
+        self._page.window_icon = "src/data/logo.png"
+        self._page.add(
+            ft.Column([self._barra_superior,
+                    ft.Divider(thickness=2, color=ft.Colors.BLUE_100),
+                    self._tabs,
+                ],
+                spacing=10,
+            )
+        )
         self._gestorRegistrarRevision.seleccionDatosEventosSismicos()
 
     def mostrarDatosEventosSismicos(self, datos_eventos):
@@ -221,9 +251,7 @@ class BoundaryRegistrarRevision:
                         ft.DataCell(ft.Text(str(evento["valorMagnitud"]))),
                     ],
                     selected=False,
-                    on_select_changed=lambda selected, i=index: self.seleccionEventoSismico(
-                        i, selected
-                    ),
+                    on_select_changed=lambda selected, i=index: self.seleccionEventoSismico(i, selected),
                 )
                 filas.append(fila)
             self._grillaEventosSismicosNoRevisados.rows = filas
@@ -233,7 +261,7 @@ class BoundaryRegistrarRevision:
             self._grillaEventosSismicosNoRevisados.visible = False
             dlg = ft.AlertDialog(
                 modal=True,
-                title=ft.Text("❌ Error"),
+                title=ft.Text("Error"),
                 content=ft.Text(
                     "No hay sismos auto detectados que aún no han sido revisados."
                 ),
@@ -242,26 +270,19 @@ class BoundaryRegistrarRevision:
                 ],
             )
             self._page.open(dlg)
-
         self._page.update()
 
     def seleccionEventoSismico(self, index, selected):
         if selected:
             for i, row in enumerate(self._grillaEventosSismicosNoRevisados.rows):
                 row.selected = i == index
-            evento_dict = self._eventosSismicosNoRevisados[index]
 
+            evento_dict = self._eventosSismicosNoRevisados[index]
             fecha_hora = evento_dict["fechaHoraOcurrencia"].split()
-            self._campos_evento["Fecha"].value = (
-                fecha_hora[0] if len(fecha_hora) > 0 else ""
-            )
-            self._campos_evento["Hora"].value = (
-                fecha_hora[1] if len(fecha_hora) > 1 else ""
-            )
+            self._campos_evento["Fecha"].value = fecha_hora[0] if len(fecha_hora) > 0 else ""
+            self._campos_evento["Hora"].value = fecha_hora[1] if len(fecha_hora) > 1 else ""
             self._campos_evento["Latitud"].value = str(evento_dict["latitudEpicentro"])
-            self._campos_evento["Longitud"].value = str(
-                evento_dict["longitudEpicentro"]
-            )
+            self._campos_evento["Longitud"].value = str(evento_dict["longitudEpicentro"])
             self._campos_evento["Magnitud"].value = str(evento_dict["valorMagnitud"])
 
             self.evento_original = {
@@ -271,9 +292,8 @@ class BoundaryRegistrarRevision:
                 "Longitud": self._campos_evento["Longitud"].value,
                 "Magnitud": self._campos_evento["Magnitud"].value,
             }
-
-            self._formulario_edicion.visible = False
             self._gestorRegistrarRevision.seleccionEventoSismico(evento_dict)
+            self._tabs.selected_index = 1
             self._page.update()
 
     def mostrarDatosEventoSismico(self, evento_extendido):
@@ -318,7 +338,8 @@ class BoundaryRegistrarRevision:
                     border_radius=10,
                 )
             )
-        self._grillaEventoSismicoSeleccionado.content.controls = [
+        self._grillaEventoSismicoSeleccionado.content.controls.clear()
+        self._grillaEventoSismicoSeleccionado.content.controls.extend([
             ft.Text(
                 "Información Extendida del Evento", size=18, weight=ft.FontWeight.BOLD
             ),
@@ -327,7 +348,7 @@ class BoundaryRegistrarRevision:
             ft.Text(f"Clasificación: {evento_extendido['clasificacion']}"),
             ft.Divider(),
             *secciones_estaciones,
-        ]
+        ])
         self._grillaEventoSismicoSeleccionado.visible = True
         self._page.update()
         self.habilitarOpcionVisualizarMapa(True)
@@ -351,10 +372,10 @@ class BoundaryRegistrarRevision:
         self._page.update()
 
     def modificarEvento(self, e):
-        self._formulario_edicion.visible = True
+        self._bloquear_tabs = True
         for campo in self._nombres_campos:
             self._campos_evento[campo].disabled = False
-        self._barra_edicion.visible = True
+        self._formulario_edicion.visible = True
         index_seleccionado = next(
             (
                 i
@@ -372,11 +393,28 @@ class BoundaryRegistrarRevision:
                 "Longitud": evento["longitudEpicentro"],
                 "Magnitud": evento["valorMagnitud"],
             }
-
             for campo, valor in self.evento_original.items():
                 self._campos_evento[campo].value = valor
-
+        self._tabs.tabs[2].visible = True
+        self._tabs.selected_index = 2
+        self._page.scroll_to(offset=0)
         self._page.update()
+    
+    def cancelarModificacion(self, e=None):
+        self._bloquear_tabs = False
+        for campo in self._nombres_campos:
+            self._campos_evento[campo].disabled = True
+        self._formulario_edicion.visible = False
+        self._tabs.tabs[2].visible = False
+        self._tabs.selected_index = 1
+        self._page.scroll_to(offset=0)
+        self._page.update()
+
+    def manejarCambioPestania(self, e):
+        if self._bloquear_tabs:
+            if self._tabs.selected_index != 2:
+                self._tabs.selected_index = 2
+                self._page.update()
 
     def solicitarAccionRevision(self):
         self._barra_acciones.visible = True
@@ -397,7 +435,7 @@ class BoundaryRegistrarRevision:
             if resultado:
                 dlg = ft.AlertDialog(
                     modal=True,
-                    title=ft.Text("✅ Éxito"),
+                    title=ft.Text("Éxito"),
                     content=ft.Text("La accion fue registrada con éxito"),
                     actions=[
                         ft.TextButton(

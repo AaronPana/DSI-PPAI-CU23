@@ -10,7 +10,7 @@ class Main:
     def pantalla_inicial(self, page: ft.Page):
         self.page = page
         self.page.theme_mode = ft.ThemeMode.LIGHT
-        self.page.title = "Red Sísmica"
+        self.page.title = "Red Sísmica Argentina"
         self.page.window.maximized = True
         self.page.scroll = ft.ScrollMode.AUTO
         self.page.window.resizable = True
@@ -29,15 +29,26 @@ class Main:
         self.page.add(
             ft.Column(
                 [
+                    ft.Container(height=30),
+                    ft.Image(
+                        src="src/data/logo.png",
+                        width=80,
+                        height=80,
+                        fit=ft.ImageFit.CONTAIN,
+                    ),
                     ft.Text(
                         "Sistema de Monitoreo Sísmico",
-                        size=20,
+                        size=24,
                         weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.BLUE_800,
+                        text_align=ft.TextAlign.CENTER,
                     ),
+                    ft.Container(height=20),
                     boton,
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=10,
             )
         )
 
