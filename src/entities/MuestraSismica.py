@@ -1,14 +1,14 @@
 from datetime import datetime
 
+from custom_types.sismos import InfoMuestra
 from entities.DetalleMuestraSismica import DetalleMuestraSismica
-
 from iterator.IAgregado import IAgregado
 from iterator.IIteradorDetallesMuestraSismica import IteradorDetallesMuestraSismica
 
-InfoMuestra = dict[str, str | list[dict[str, str]]]
 
-
-class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
+class MuestraSismica(
+    IAgregado[DetalleMuestraSismica, IteradorDetallesMuestraSismica]
+):  # Hereda de IAgregado para el Patron Iterator
     def __init__(self, fechaHoraMuestra: datetime) -> None:
         self._fechaHoraMuestra: datetime = fechaHoraMuestra
         self._detallesMuestraSismica: list[DetalleMuestraSismica] = []
@@ -19,12 +19,18 @@ class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
     def getDatos(self) -> InfoMuestra:
         datosDetalles: list[dict[str, str]] = []
 
-        iteradorDetallesMuestraSismica: IteradorDetallesMuestraSismica = self.crearIterador(self._detallesMuestraSismica)
+        iteradorDetallesMuestraSismica: IteradorDetallesMuestraSismica = (
+            self.crearIterador(self._detallesMuestraSismica)
+        )
         iteradorDetallesMuestraSismica.primero()
         while not iteradorDetallesMuestraSismica.haFinalizado():
-            detalleMuestraSismicaActual: DetalleMuestraSismica  = iteradorDetallesMuestraSismica.elementoActual()
+            detalleMuestraSismicaActual: DetalleMuestraSismica | None = (
+                iteradorDetallesMuestraSismica.elementoActual()
+            )
             if detalleMuestraSismicaActual:
-                datosDetalleMuestraSismica = detalleMuestraSismicaActual.getDatos()
+                datosDetalleMuestraSismica: dict[str, str] = (
+                    detalleMuestraSismicaActual.getDatos()
+                )
                 datosDetalles.append(datosDetalleMuestraSismica)
             iteradorDetallesMuestraSismica.siguiente()
 
@@ -33,10 +39,12 @@ class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
             "datosDetalles": datosDetalles,
         }
         return infoMuestra
-    
+
     # Modificado respecto al Patron Iterador
-    def crearIterador(self, listaElementos: list[DetalleMuestraSismica]) -> IteradorDetallesMuestraSismica:
-        return IteradorDetallesMuestraSismica(listaElementos)
+    def crearIterador(
+        self, coleccion: list[DetalleMuestraSismica]
+    ) -> IteradorDetallesMuestraSismica:
+        return IteradorDetallesMuestraSismica(coleccion)
 
     # Métodos de acceso (getters y setters)
 

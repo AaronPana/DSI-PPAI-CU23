@@ -1,5 +1,5 @@
 class GestorGenerarSismograma:
-    _sismograma: str = "../data/sismograma.png"
+    _sismograma: str = "src/data/images/sismograma.png"
 
     def __init__(self) -> None:
         pass

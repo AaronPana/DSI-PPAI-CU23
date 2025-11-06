@@ -1,5 +1,10 @@
 from abc import ABC, abstractmethod
-class IIterador(ABC):
+from typing import Generic
+
+from custom_types.iterator import T
+
+
+class IIterador(ABC, Generic[T]):
     @abstractmethod
     def primero(self) -> None:
         pass
@@ -9,7 +14,7 @@ class IIterador(ABC):
         pass
 
     @abstractmethod
-    def elementoActual(self) -> object:
+    def elementoActual(self) -> T | None:
         pass
 
     @abstractmethod
