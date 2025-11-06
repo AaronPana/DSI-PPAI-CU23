@@ -10,12 +10,15 @@ from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from entities.SerieTemporal import SerieTemporal
 from entities.Sismografo import Sismografo
 
+from iterator.IAgregado import IAgregado
+from iterator.IIteradorSeriesTemporales import IteradorSeriesTemporales
+
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
 
-class EventoSismico:
+class EventoSismico(IAgregado):
     def __init__(
         self,
         fechaHoraFin: datetime,
@@ -85,6 +88,8 @@ class EventoSismico:
     @property
     def longitudHipocentro(self) -> float:
         return self._longitudHipocentro
+    
+    # Métodos de negocio
 
     def esAutoDetectado(self) -> bool:
         return self._estadoActual.esAutoDetectado()
@@ -138,17 +143,24 @@ class EventoSismico:
         }
         return infoDatosSismicos
 
-    def getDatosSeriesTemporales(
-        self, sismografos: list["Sismografo"]
-    ) -> list[InfoSerieTemporal]:
-        """
-        rtype: list[InfoSerieTemporal]
-        return: diccionario con todos los detalles de todas las muestras de todas las series temporales
-        """
-        infoSeriesTemporales: list[InfoSerieTemporal] = [
-            serie.getDatos(sismografos) for serie in self._seriesTemporales
-        ]
+    # Modificado respecto al Patron Iterador
+    def getDatosSeriesTemporales(self, sismografos: list["Sismografo"]) -> list[dict]:
+        infoSeriesTemporales: list[dict] = []
+        iteradorSeriesTemporales: IteradorSeriesTemporales = self.crearIterador(self._seriesTemporales)
+
+        iteradorSeriesTemporales.primero()
+        while not iteradorSeriesTemporales.haFinalizado():
+            serieTemporalActual: SerieTemporal = iteradorSeriesTemporales.elementoActual()
+            if serieTemporalActual:
+                datosSerieTemporal: SerieTemporal = serieTemporalActual.getDatos(sismografos)
+                infoSeriesTemporales.append(datosSerieTemporal)
+            iteradorSeriesTemporales.siguiente()
+
         return infoSeriesTemporales
+
+    # Modificado respecto al Patron Iterador
+    def crearIterador(self, listaElementos: list[SerieTemporal]) -> IteradorSeriesTemporales:
+        return IteradorSeriesTemporales(listaElementos)
 
     def ordenarSeriesTemporalesPorEstacionSismologica(
         self, infoSeriesTemporales: list[InfoSerieTemporal]
@@ -198,8 +210,6 @@ class EventoSismico:
         self._cambiosEstado.append(nuevoCambioEstado)
         self._estadoActual = nuevoEstado
         return nuevoCambioEstado
-
-    # Métodos de acceso (getters y setters)
 
     @property
     def fechaHoraFin(self) -> datetime:

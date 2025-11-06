@@ -5,6 +5,9 @@ from typing import TYPE_CHECKING
 from entities.Estado import Estado
 from entities.MuestraSismica import MuestraSismica
 
+from iterator.IAgregado import IAgregado
+from iterator.IIteradorMuestrasSismicas import IteradorMuestrasSismicas
+
 if TYPE_CHECKING:
     from entities.Sismografo import Sismografo
 
@@ -12,7 +15,7 @@ InfoMuestra = dict[str, str | list[dict[str, str]]]
 InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
 
 
-class SerieTemporal:
+class SerieTemporal(IAgregado):
     def __init__(
         self,
         condicionAlarma: bool,
@@ -30,18 +33,20 @@ class SerieTemporal:
 
     # Metodos utilizados en el CU23
 
+    # Modificado respecto al Patron Iterador
     def getDatos(self, sismografos: list["Sismografo"]) -> InfoSerieTemporal:
-        """
-        rtype: InfoSerieTemporal
-        return: diccionario con datos y lista de muestras de la serie temporal
-        """
-
+        datosMuestras: list[InfoMuestra] = []
         sismografo: Sismografo = self.esMiSismografo(sismografos)
 
-        datosMuestras: list[InfoMuestra] = [
-            muestra.getDatos() for muestra in self._muestrasSismicas
-        ]
-
+        iteradorMuestrasSismicas: IteradorMuestrasSismicas = self.crearIterador(self._muestrasSismicas)
+        iteradorMuestrasSismicas.primero()
+        while not iteradorMuestrasSismicas.haFinalizado():
+            muestraSismicaActual: MuestraSismica  = iteradorMuestrasSismicas.elementoActual()
+            if muestraSismicaActual:
+                datoMuestraSismica = muestraSismicaActual.getDatos()
+                datosMuestras.append(datoMuestraSismica)
+            iteradorMuestrasSismicas.siguiente()
+        
         infoSerieTemporal: InfoSerieTemporal = {
             "estacionSismologica": sismografo.getNombreEstacionSismologica(),
             "fechaHoraRegistro": self._fechaHoraRegistro.strftime("%d/%m/%Y %H:%M:%S"),
@@ -49,8 +54,11 @@ class SerieTemporal:
             "condicionAlarma": "SI" if self._condicionAlarma else "NO",
             "datosMuestras": datosMuestras,
         }
-
         return infoSerieTemporal
+    
+    # Modificado respecto al Patron Iterador
+    def crearIterador(self, listaElementos: list[MuestraSismica]) -> IteradorMuestrasSismicas:
+        return IteradorMuestrasSismicas(listaElementos)
 
     def esMiSismografo(self, sismografos: list["Sismografo"]) -> "Sismografo":
         return [sismografo for sismografo in sismografos if sismografo.esMiSerie(self)][

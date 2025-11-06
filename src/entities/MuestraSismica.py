@@ -2,30 +2,41 @@ from datetime import datetime
 
 from entities.DetalleMuestraSismica import DetalleMuestraSismica
 
+from iterator.IAgregado import IAgregado
+from iterator.IIteradorDetallesMuestraSismica import IteradorDetallesMuestraSismica
+
 InfoMuestra = dict[str, str | list[dict[str, str]]]
 
 
-class MuestraSismica:
+class MuestraSismica(IAgregado):  # Hereda de IAgregado para el Patron Iterator
     def __init__(self, fechaHoraMuestra: datetime) -> None:
         self._fechaHoraMuestra: datetime = fechaHoraMuestra
         self._detallesMuestraSismica: list[DetalleMuestraSismica] = []
 
     # Metodos utilizados en el CU23
 
+    # Modificado respecto al Patron Iterador
     def getDatos(self) -> InfoMuestra:
-        """
-        rtype: InfoMuestra
-        return: diccionario con fechaHoraMuestra y lista de detalles de la muestra
-        """
-        datosDetalles: list[dict[str, str]] = [
-            detalle.getDatos() for detalle in self._detallesMuestraSismica
-        ]
+        datosDetalles: list[dict[str, str]] = []
+
+        iteradorDetallesMuestraSismica: IteradorDetallesMuestraSismica = self.crearIterador(self._detallesMuestraSismica)
+        iteradorDetallesMuestraSismica.primero()
+        while not iteradorDetallesMuestraSismica.haFinalizado():
+            detalleMuestraSismicaActual: DetalleMuestraSismica  = iteradorDetallesMuestraSismica.elementoActual()
+            if detalleMuestraSismicaActual:
+                datosDetalleMuestraSismica = detalleMuestraSismicaActual.getDatos()
+                datosDetalles.append(datosDetalleMuestraSismica)
+            iteradorDetallesMuestraSismica.siguiente()
 
         infoMuestra: InfoMuestra = {
             "fechaHoraMuestra": self._fechaHoraMuestra.strftime("%d/%m/%Y %H:%M:%S"),
             "datosDetalles": datosDetalles,
         }
         return infoMuestra
+    
+    # Modificado respecto al Patron Iterador
+    def crearIterador(self, listaElementos: list[DetalleMuestraSismica]) -> IteradorDetallesMuestraSismica:
+        return IteradorDetallesMuestraSismica(listaElementos)
 
     # Métodos de acceso (getters y setters)
 
