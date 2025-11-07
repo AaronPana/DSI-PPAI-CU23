@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from custom_types.sismos import InfoDatosSismicos, InfoSerieTemporal
 from entities.AlcanceSismo import AlcanceSismo
 from entities.CambioEstado import CambioEstado
 from entities.ClasificacionSismo import ClasificacionSismo
@@ -9,16 +10,11 @@ from entities.MagnitudRichter import MagnitudRichter
 from entities.OrigenDeGeneracion import OrigenDeGeneracion
 from entities.SerieTemporal import SerieTemporal
 from entities.Sismografo import Sismografo
-
 from iterator.IAgregado import IAgregado
 from iterator.IIteradorSeriesTemporales import IteradorSeriesTemporales
 
-InfoMuestra = dict[str, str | list[dict[str, str]]]
-InfoSerieTemporal = dict[str, str | list[InfoMuestra]]
-InfoDatosSismicos = dict[str, str | list[InfoSerieTemporal]]
 
-
-class EventoSismico(IAgregado):
+class EventoSismico(IAgregado[SerieTemporal, IteradorSeriesTemporales]):
     def __init__(
         self,
         fechaHoraFin: datetime,
@@ -88,7 +84,7 @@ class EventoSismico(IAgregado):
     @property
     def longitudHipocentro(self) -> float:
         return self._longitudHipocentro
-    
+
     # Métodos de negocio
 
     def esAutoDetectado(self) -> bool:
@@ -144,23 +140,31 @@ class EventoSismico(IAgregado):
         return infoDatosSismicos
 
     # Modificado respecto al Patron Iterador
-    def getDatosSeriesTemporales(self, sismografos: list["Sismografo"]) -> list[dict]:
-        infoSeriesTemporales: list[dict] = []
-        iteradorSeriesTemporales: IteradorSeriesTemporales = self.crearIterador(self._seriesTemporales)
+    def getDatosSeriesTemporales(
+        self, sismografos: list["Sismografo"]
+    ) -> list[InfoSerieTemporal]:
+        infoSeriesTemporales: list[InfoSerieTemporal] = []
+        iteradorSeriesTemporales: IteradorSeriesTemporales = self.crearIterador(
+            self._seriesTemporales
+        )
 
         iteradorSeriesTemporales.primero()
         while not iteradorSeriesTemporales.haFinalizado():
-            serieTemporalActual: SerieTemporal = iteradorSeriesTemporales.elementoActual()
+            serieTemporalActual: SerieTemporal | None = (
+                iteradorSeriesTemporales.elementoActual()
+            )
             if serieTemporalActual:
-                datosSerieTemporal: SerieTemporal = serieTemporalActual.getDatos(sismografos)
+                datosSerieTemporal: InfoSerieTemporal = serieTemporalActual.getDatos(
+                    sismografos
+                )
                 infoSeriesTemporales.append(datosSerieTemporal)
             iteradorSeriesTemporales.siguiente()
 
         return infoSeriesTemporales
 
     # Modificado respecto al Patron Iterador
-    def crearIterador(self, listaElementos: list[SerieTemporal]) -> IteradorSeriesTemporales:
-        return IteradorSeriesTemporales(listaElementos)
+    def crearIterador(self, coleccion: list[SerieTemporal]) -> IteradorSeriesTemporales:
+        return IteradorSeriesTemporales(coleccion)
 
     def ordenarSeriesTemporalesPorEstacionSismologica(
         self, infoSeriesTemporales: list[InfoSerieTemporal]

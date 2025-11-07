@@ -1,7 +1,9 @@
-from iterator.IIterador import IIterador
 from entities.MuestraSismica import MuestraSismica
-class IteradorMuestrasSismicas(IIterador):
-    def __init__(self, listaElementos: list[MuestraSismica]):
+from iterator.IIterador import IIterador
+
+
+class IteradorMuestrasSismicas(IIterador[MuestraSismica]):
+    def __init__(self, listaElementos: list[MuestraSismica]) -> None:
         self.listaMuestrasSismicas: list[MuestraSismica] = listaElementos
         self.posicionActual: int = 0
 
@@ -11,13 +13,13 @@ class IteradorMuestrasSismicas(IIterador):
     def haFinalizado(self) -> bool:
         return self.posicionActual >= len(self.listaMuestrasSismicas)
 
-    def elementoActual(self) -> object:
+    def elementoActual(self) -> MuestraSismica | None:
         if not self.haFinalizado():
             return self.listaMuestrasSismicas[self.posicionActual]
         return None
-    
-    def comprobarFiltro(self):
-        pass
+
+    def comprobarFiltro(self) -> bool:
+        return False
 
     def siguiente(self) -> None:
         self.posicionActual += 1
